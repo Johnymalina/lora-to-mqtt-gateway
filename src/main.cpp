@@ -11,13 +11,18 @@
 #include <Arduino.h>
 
 #include <WiFi.h>
-
 const char *ssid = "TheHorde";
 const char *password = "Mylifeforthehorde";
 
+#include <LoRa.h>
+#define SS_PIN 5
+#define RST_PIN 4
+#define DIO0_PIN 2
+String loraData;
+
 void setup()
 {
-
+  // WIFI
   WiFi.begin(ssid, password);
   int counter = 0;
   debug("Connecting WiFi");
@@ -36,8 +41,27 @@ void setup()
   debugln("");
   debug("WiFi Connected to network: ");
   debugln(WiFi.SSID());
+  // LORA
+  LoRa.setPins(SS_PIN, RST_PIN, DIO0_PIN);
+  if (!LoRa.begin(868E6))
+  {
+    debugln("Starting LoRa failed!");
+    while (1)
+      ;
+  }
+  else
+  {
+    debugln("LoRa Runninng...");
+  }
 }
 
 void loop()
 {
+  if (LoRa.parsePacket())
+  {
+    while (LoRa.available())
+    {
+      loraData = LoRa.readString();
+    }
+  }
 }
