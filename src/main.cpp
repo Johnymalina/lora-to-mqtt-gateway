@@ -18,7 +18,19 @@ const char *password = "Mylifeforthehorde";
 #define SS_PIN 5
 #define RST_PIN 4
 #define DIO0_PIN 2
+
 String loraData;
+
+#include <PubSubClient.h>
+const char *mqtt_broker = "10.10.42.4";
+const char *topic = "lora/mqtt";
+const char *mqtt_username = "mqtt-user";
+const char *mqtt_password = "HesloMqtt196455";
+const int mqtt_port = 1883;
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+char tempString[8];
 
 void setup()
 {
@@ -53,6 +65,9 @@ void setup()
   {
     debugln("LoRa Runninng...");
   }
+  // MQTT
+  client.setServer(mqtt_broker, mqtt_port);
+  client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
 }
 
 void loop()
@@ -63,5 +78,7 @@ void loop()
     {
       loraData = LoRa.readString();
     }
+    loraData.toCharArray(tempString, 8);
+    client.publish(topic, tempString);
   }
 }
