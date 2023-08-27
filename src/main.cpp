@@ -34,6 +34,7 @@ char tempString[8];
 
 void setup()
 {
+  debugBegin(9600);
   // WIFI
   WiFi.begin(ssid, password);
   int counter = 0;
@@ -77,6 +78,7 @@ void loop()
     while (LoRa.available())
     {
       loraData = LoRa.readString();
+      debugln("LoRa Received data.");
     }
     loraData.toCharArray(tempString, 8);
     client.publish(topic, tempString);
