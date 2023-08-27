@@ -1,3 +1,5 @@
+#define DEBUG 1
+
 #if DEBUG == 1
 #define debug(x) Serial.print(x)
 #define debugln(x) Serial.println(x)
@@ -78,7 +80,8 @@ void loop()
     while (LoRa.available())
     {
       loraData = LoRa.readString();
-      debugln("LoRa Received data.");
+      debugln("LoRa Received data:");
+      debug(loraData);
     }
     loraData.toCharArray(tempString, 8);
     client.publish(topic, tempString);
