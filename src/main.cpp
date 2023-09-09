@@ -22,6 +22,7 @@ const char *password = "Mylifeforthehorde";
 #define DIO0_PIN 2
 
 String loraData;
+String json = "{\"temp\":22.8200016,\"hum\":64.3203125,\"lux\":10.83333302}";
 
 #include <PubSubClient.h>
 const char *mqtt_broker = "10.10.42.4";
@@ -32,7 +33,7 @@ const int mqtt_port = 1883;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-char tempString[256];
+unsigned long mqttTimer = 0;
 
 void setup()
 {
@@ -85,12 +86,14 @@ void setup()
       ESP.restart();
     }
   }
+  client.setBufferSize(512);
   debugln();
   debugln("MQTT Connected");
 }
 
 void loop()
 {
+
   if (LoRa.parsePacket())
   {
     while (LoRa.available())
@@ -99,8 +102,13 @@ void loop()
       debug("LoRa Received data:");
       debugln(loraData);
     }
-    loraData.toCharArray(tempString, 256);
-    debugln(tempString);
-    client.publish(topic, tempString);
+  }
+  if (millis() > mqttTimer + 1000)
+  {
+    int strLenght = loraData.length() + 1;
+    char mqttData[strLenght];
+    loraData.toCharArray(mqttData, strLenght);
+    client.publish(topic, mqttData);
+    mqttTimer = millis();
   }
 }
