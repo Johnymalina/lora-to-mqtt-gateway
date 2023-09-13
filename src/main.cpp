@@ -34,6 +34,7 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 unsigned long mqttTimer = 0;
+bool msgToSend = 0;
 
 void setup()
 {
@@ -58,7 +59,7 @@ void setup()
   debug("WiFi Connected to network: ");
   debugln(WiFi.SSID());
   // LORA
-  debug("Connecting LoRa");
+  debugln("Connecting LoRa");
   LoRa.setPins(SS_PIN, RST_PIN, DIO0_PIN);
   if (!LoRa.begin(868E6))
   {
@@ -72,9 +73,10 @@ void setup()
   }
   // MQTT
   client.setServer(mqtt_broker, mqtt_port);
-  debug("MQTT Connecting");
+  debugln("MQTT Connecting");
   int counterMqtt = 0;
-  while (!client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password))
+  client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
+  while (!client.connected())
   {
     debug(".");
     delay(200);
@@ -86,8 +88,6 @@ void setup()
       ESP.restart();
     }
   }
-  client.setBufferSize(512);
-  debugln();
   debugln("MQTT Connected");
 }
 
@@ -101,14 +101,22 @@ void loop()
       loraData = LoRa.readString();
       debug("LoRa Received data:");
       debugln(loraData);
+      msgToSend = 1;
     }
   }
-  if (millis() > mqttTimer + 1000)
+  if (msgToSend)
   {
+    debugln("MQTT data avalaible to send");
     int strLenght = loraData.length() + 1;
     char mqttData[strLenght];
     loraData.toCharArray(mqttData, strLenght);
-    client.publish(topic, mqttData);
-    mqttTimer = millis();
+    while (!client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password))
+      ;
+    debugln("MQTT reconnected");
+    while (!client.publish(topic, mqttData))
+    {
+      debugln("Sending MQTT data");
+    }
+    msgToSend = 0;
   }
 }
