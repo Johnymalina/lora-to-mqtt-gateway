@@ -16,6 +16,13 @@
 const char *ssid = "TheHorde";
 const char *password = "Mylifeforthehorde";
 
+#include <WiFiClient.h>
+#include <WebServer.h>
+
+#include <ElegantOTA.h>
+
+WebServer server(80);
+
 #include <LoRa.h>
 #define SS_PIN 5
 #define RST_PIN 4
@@ -40,6 +47,7 @@ void setup()
 {
   debugBegin(9600);
   // WIFI
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   int counterWifi = 0;
   debug("Connecting WiFi");
@@ -58,6 +66,16 @@ void setup()
   debugln("");
   debug("WiFi Connected to network: ");
   debugln(WiFi.SSID());
+  debug("IP address: ");
+  debugln(WiFi.localIP());
+
+  // OTA
+  server.on("/", []()
+            { server.send(200, "text/plain", "LoRa to MQTT Gateway"); });
+  ElegantOTA.begin(&server); // Start ElegantOTA
+  server.begin();
+  debugln("HTTP server started");
+
   // LORA
   debugln("Connecting LoRa");
   LoRa.setPins(SS_PIN, RST_PIN, DIO0_PIN);
@@ -93,6 +111,8 @@ void setup()
 
 void loop()
 {
+  server.handleClient();
+  ElegantOTA.loop();
 
   if (LoRa.parsePacket())
   {
