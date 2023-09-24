@@ -17,7 +17,41 @@ String loraData;
 
 #include <Arduino.h>
 
-#include <radio.h>
+#include <LoRa.h>
+
+#define SS_PIN 5
+#define RST_PIN 4
+#define DIO0_PIN 2
+
+void loraInitialise()
+{
+  debugln("Connecting LoRa");
+  LoRa.setPins(SS_PIN, RST_PIN, DIO0_PIN);
+  if (!LoRa.begin(868E6))
+  {
+    debugln("Starting LoRa failed!");
+    while (1)
+      ;
+  }
+  else
+  {
+    debugln("LoRa Runninng");
+  }
+}
+
+void loraReceive()
+{
+  if (LoRa.parsePacket())
+  {
+    while (LoRa.available())
+    {
+      loraData = LoRa.readString();
+      debug("LoRa Received data:");
+      debugln(loraData);
+      msgToSend = 1;
+    }
+  }
+}
 
 #include <WiFiClient.h>
 #include <PubSubClient.h>
@@ -114,7 +148,7 @@ void setup()
 {
   debugBegin(9600);
 
-  Radio::Initialise();
+  loraInitialise();
 
   wifiConnect();
 
@@ -133,7 +167,7 @@ void loop()
   server.handleClient();
   ElegantOTA.loop();
 
-  Radio::Receive();
+  loraReceive();
 
   mqttPublish();
 }
