@@ -13,8 +13,6 @@
 bool msgToSend = 0;
 bool mqttConnected;
 
-String loraData;
-
 #include <Arduino.h>
 
 #include <LoRa.h>
@@ -41,17 +39,18 @@ void loraInitialise()
 
 String loraReceive()
 {
+  String receivedData;
   if (LoRa.parsePacket())
   {
     while (LoRa.available())
     {
-      String receivedData = LoRa.readString();
+      receivedData = LoRa.readString();
       debug("LoRa Received data:");
-      debugln(loraData);
+      debugln(receivedData);
       msgToSend = 1;
     }
   }
-  return loraData;
+  return receivedData;
 }
 
 #include <WiFiClient.h>
@@ -86,7 +85,7 @@ void mqttConnect()
   client.setKeepAlive(1000);
 }
 
-void mqttPublish()
+void mqttPublish(String loraData)
 {
   mqttConnected = client.connected();
   if (msgToSend)
@@ -383,7 +382,7 @@ void loop()
   server.handleClient();
   ElegantOTA.loop();
 
-  loraReceive();
+  String loraData = loraReceive();
 
-  mqttPublish();
+  mqttPublish(loraData);
 }
