@@ -63,7 +63,7 @@ const int mqtt_port = 1883;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-void mqttConnect()
+void mqttInitialize()
 {
   client.setServer(mqtt_broker, mqtt_port);
   debugln("MQTT Connecting");
@@ -82,7 +82,7 @@ void mqttConnect()
     }
   }
   debugln("MQTT Connected");
-  client.setKeepAlive(1000);
+  // client.setKeepAlive(1000);
 }
 
 void mqttPublish(String loraData)
@@ -148,13 +148,14 @@ void websitePublish()
   ptr += "<html>\n";
   ptr += "<head>\n";
   ptr += "    <title>ESP32 LoRa2MQTT Gateway</title>\n";
+  ptr += " <meta http-equiv=\"refresh\" content=\"10\">\n";
   ptr += "    <style>\n";
   ptr += "        /* Reset default margin and padding */\n";
   ptr += "        body, h1, h2, ul, li {\n";
   ptr += "            margin: 0;\n";
   ptr += "            padding: 0;\n";
   ptr += "        }\n";
-  ptr += "\n";
+
   ptr += "        /* Add background color and font styles */\n";
   ptr += "        body {\n";
   ptr += "            font-family: 'Arial', sans-serif;\n";
@@ -367,7 +368,7 @@ void setup()
 
   wifiConnect();
 
-  mqttConnect();
+  mqttInitialize();
 
   ElegantOTA.begin(&server);
 
