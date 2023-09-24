@@ -81,7 +81,6 @@ void mqttInitialize()
     }
   }
   debugln("MQTT Connected");
-  // client.setKeepAlive(1000);
 }
 
 void mqttPublish(String loraData)
