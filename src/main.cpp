@@ -1,4 +1,4 @@
-#define DEBUG 0
+#define DEBUG 1
 
 #include <globals.h>
 
@@ -7,6 +7,8 @@
 #include <wlan.h>
 
 #include <mqtt.h>
+
+#include <website.h>
 
 #include <WebServer.h>
 
@@ -25,12 +27,12 @@ void setup()
   Wifi::Connect();
 
   // OTA
-  server.on("/", []()
-            { server.send(200, "text/plain", "LORA2MQTT Gateway"); });
+
   ElegantOTA.begin(&server); // Start ElegantOTA
   server.begin();
   debugln("HTTP server started");
-
+  server.on("/", []()
+            { server.send(200, "text/html", Website::Update()); });
   Mqtt::Connect();
 }
 
