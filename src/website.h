@@ -54,7 +54,6 @@ namespace Website
         ptr += "            background-color: #4CAF50; /* Green */\n";
         ptr += "        }\n";
         ptr += "\n";
-
         ptr += "\n";
         ptr += "        .status-error {\n";
         ptr += "            background-color: #F44336; /* Red */\n";
@@ -160,11 +159,18 @@ namespace Website
         ptr += "        }\n";
         ptr += "\n";
         ptr += "        // Simulated status data (replace with actual status)\n";
-        ptr += "        const status = \"ok\";\n";
+        if (mqttConnected)
+        {
+            ptr += "        const status = \"ok\";\n";
+        }
+        else
+        {
+            ptr += "        const status = \"error\";\n";
+        }
         ptr += "\n";
         ptr += "        // Simulated message data (replace with actual data retrieval)\n";
         ptr += "        const messages = [\n";
-        ptr += "            { timestamp: \"2023-09-24 10:00:00\", content: \"Message 1: Hello, World!\" },\n";
+        ptr += msg1;
         ptr += "            { timestamp: \"2023-09-24 10:15:00\", content: \"Message 2: Temperature: 25°C\" },\n";
         ptr += "            { timestamp: \"2023-09-24 10:30:00\", content: \"Message 3: Sensor Data: 123\" }\n";
         ptr += "        ];\n";
@@ -178,8 +184,8 @@ namespace Website
         ptr += "                const messageItem = document.createElement('li');\n";
         ptr += "                messageItem.classList.add('message-item');\n";
         ptr += "                messageItem.innerHTML = `\n";
-        ptr += "                    <strong>Timestamp:</strong> ${message.timestamp}<br>\n";
-        ptr += "                    <strong>Content:</strong> ${message.content}\n";
+        ptr += "                    <strong>Timestamp:</strong> ${message.temp}<br>\n";
+        ptr += "                    <strong>Content:</strong> ${message.lux}\n";
         ptr += "                `;\n";
         ptr += "                messageList.appendChild(messageItem);\n";
         ptr += "            });\n";

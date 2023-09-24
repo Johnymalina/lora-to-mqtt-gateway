@@ -13,5 +13,6 @@
 #include <Arduino.h>
 
 bool msgToSend = 0;
+bool mqttConnected;
 
 String loraData;

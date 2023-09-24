@@ -34,9 +34,11 @@ namespace Mqtt
             }
         }
         debugln("MQTT Connected");
+        client.setKeepAlive(1000);
     }
     void Publish()
     {
+        mqttConnected = client.connected();
         if (msgToSend)
         {
             debugln("MQTT data avalaible to send");
