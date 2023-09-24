@@ -13,7 +13,6 @@
 #include <Arduino.h>
 
 bool msgToSend = 0;
-bool mqttConnected;
 
 #include <LoRa.h>
 
@@ -144,6 +143,9 @@ unsigned long mqttTimer = 0;
 
 void websitePublish()
 {
+  client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
+  bool mqttConnected = client.connected();
+
   String ptr = "<!DOCTYPE html>\n";
   ptr += "<html>\n";
   ptr += "<head>\n";
