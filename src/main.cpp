@@ -10,10 +10,10 @@
 #define debugBegin(x)
 #endif
 
+#include <Arduino.h>
+
 bool msgToSend = 0;
 bool mqttConnected;
-
-#include <Arduino.h>
 
 #include <LoRa.h>
 
@@ -105,7 +105,44 @@ void mqttPublish(String loraData)
   }
 }
 
-String websiteGenerate()
+#include <WebServer.h>
+
+#include <ElegantOTA.h>
+
+#include <WiFi.h>
+const char *ssid = "TheHorde";
+const char *password = "Mylifeforthehorde";
+
+void wifiConnect()
+{
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  int counterWifi = 0;
+  debug("Connecting WiFi");
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    debug(".");
+    delay(200);
+    if (++counterWifi > 100)
+    {
+      debugln("");
+      debugln("Cant connect to WiFi... Restarting");
+      delay(100);
+      ESP.restart();
+    }
+  }
+  debugln("");
+  debug("WiFi Connected to network: ");
+  debugln(WiFi.SSID());
+  debug("IP address: ");
+  debugln(WiFi.localIP());
+}
+
+WebServer server(80);
+
+unsigned long mqttTimer = 0;
+
+void websitePublish()
 {
   String ptr = "<!DOCTYPE html>\n";
   ptr += "<html>\n";
@@ -319,45 +356,8 @@ String websiteGenerate()
   ptr += "    </script>\n";
   ptr += "</body>\n";
   ptr += "</html>";
-  return ptr;
+  server.send(200, "text/html", ptr);
 }
-
-#include <WebServer.h>
-
-#include <ElegantOTA.h>
-
-#include <WiFi.h>
-const char *ssid = "TheHorde";
-const char *password = "Mylifeforthehorde";
-
-void wifiConnect()
-{
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  int counterWifi = 0;
-  debug("Connecting WiFi");
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    debug(".");
-    delay(200);
-    if (++counterWifi > 100)
-    {
-      debugln("");
-      debugln("Cant connect to WiFi... Restarting");
-      delay(100);
-      ESP.restart();
-    }
-  }
-  debugln("");
-  debug("WiFi Connected to network: ");
-  debugln(WiFi.SSID());
-  debug("IP address: ");
-  debugln(WiFi.localIP());
-}
-
-WebServer server(80);
-
-unsigned long mqttTimer = 0;
 
 void setup()
 {
@@ -367,19 +367,19 @@ void setup()
 
   wifiConnect();
 
-  // OTA
+  mqttConnect();
 
-  ElegantOTA.begin(&server); // Start ElegantOTA
+  ElegantOTA.begin(&server);
+
   server.begin();
   debugln("HTTP server started");
-  server.on("/", []()
-            { server.send(200, "text/html", websiteGenerate()); });
-  mqttConnect();
+  server.on("/", websitePublish);
 }
 
 void loop()
 {
   server.handleClient();
+
   ElegantOTA.loop();
 
   String loraData = loraReceive();
