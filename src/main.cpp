@@ -1,6 +1,21 @@
 #define DEBUG 1
 
-#include <globals.h>
+#if DEBUG == 1
+#define debug(x) Serial.print(x)
+#define debugln(x) Serial.println(x)
+#define debugBegin(x) Serial.begin(x)
+#else
+#define debug(x)
+#define debugln(x)
+#define debugBegin(x)
+#endif
+
+bool msgToSend = 0;
+bool mqttConnected;
+
+String loraData;
+
+#include <Arduino.h>
 
 #include <radio.h>
 
