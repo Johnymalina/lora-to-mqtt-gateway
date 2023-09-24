@@ -29,7 +29,6 @@ WebServer server(80);
 #define DIO0_PIN 2
 
 String loraData;
-String json = "{\"temp\":22.8200016,\"hum\":64.3203125,\"lux\":10.83333302}";
 
 #include <PubSubClient.h>
 const char *mqtt_broker = "10.10.42.4";
