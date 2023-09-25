@@ -141,13 +141,15 @@ unsigned long mqttTimer = 0;
 
 void websitePublish()
 {
-  client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
-  bool mqttConnected = client.connected();
+
+  bool mqttConnected = client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
+  bool loraConnected = LoRa.begin(868E6);
 
   String ptr = "<!DOCTYPE html>\n";
   ptr += "<html>\n";
   ptr += "<head>\n";
   ptr += "    <title>ESP32 LoRa2MQTT Gateway</title>\n";
+  ptr += " <meta http-equiv=\" refresh \" content=\" 30 \">\n";
   ptr += "    <style>\n";
   ptr += "        /* Reset default margin and padding */\n";
   ptr += "        body, h1, h2, ul, li {\n";
@@ -305,8 +307,24 @@ void websitePublish()
   ptr += "        }\n";
   ptr += "\n";
   ptr += "        // Set status colors directly with variables\n";
-  ptr += "        document.documentElement.style.setProperty('--mqtt-color', 'green'); // Change to 'red' for \"error\"\n";
-  ptr += "        document.documentElement.style.setProperty('--lora-color', 'red'); // Change to 'green' for \"ok\"\n";
+
+  if (mqttConnected)
+  {
+    ptr += "        document.documentElement.style.setProperty('--mqtt-color', 'green');\n";
+  }
+  else
+  {
+    ptr += "        document.documentElement.style.setProperty('--mqtt-color', 'red');\n";
+  }
+  if (loraConnected)
+  {
+    ptr += "        document.documentElement.style.setProperty('--lora-color', 'green');\n";
+  }
+  else
+  {
+    ptr += "        document.documentElement.style.setProperty('--lora-color', 'red');\n";
+  }
+
   ptr += "\n";
   ptr += "        // Update the current time every second\n";
   ptr += "        setInterval(displayCurrentTime, 1000);\n";
