@@ -149,7 +149,7 @@ void websitePublish()
   ptr += "<html>\n";
   ptr += "<head>\n";
   ptr += "    <title>ESP32 LoRa2MQTT Gateway</title>\n";
-  ptr += " <meta http-equiv=\" refresh \" content=\" 30 \">\n";
+  ptr += "    <meta http-equiv=\"refresh\" content=\"30\" />\n";
   ptr += "    <style>\n";
   ptr += "        /* Reset default margin and padding */\n";
   ptr += "        body, h1, h2, ul, li {\n";
