@@ -144,6 +144,10 @@ void websitePublish()
 
   bool mqttConnected = client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
   bool loraConnected = LoRa.begin(868E6);
+  debug("MQTT Status: ");
+  debugln(mqttConnected);
+  debug("LORA Status: ");
+  debugln(loraConnected);
 
   String ptr = "<!DOCTYPE html>\n";
   ptr += "<html>\n";
