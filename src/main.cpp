@@ -16,14 +16,18 @@ bool msgToSend = 0;
 
 #include <LoRa.h>
 
-#define SS_PIN 5
-#define RST_PIN 4
-#define DIO0_PIN 2
+#define SCK 14
+#define MISO 32
+#define MOSI 33
+#define SS 16
+#define RST 4
+#define DIO0 2
 
 void loraInitialise()
 {
   debugln("Connecting LoRa");
-  LoRa.setPins(SS_PIN, RST_PIN, DIO0_PIN);
+  SPI.begin(SCK, MISO, MOSI, SS);
+  LoRa.setPins(SS, RST, DIO0);
   if (!LoRa.begin(868E6))
   {
     debugln("Starting LoRa failed!");
