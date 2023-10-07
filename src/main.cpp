@@ -23,6 +23,11 @@ bool msgToSend = 0;
 #define RST 4
 #define DIO0 2
 
+void onReceive(int packetSize)
+{
+  debugln("Iam Awake");
+}
+
 void loraInitialise()
 {
   debugln("Connecting LoRa");
@@ -38,6 +43,7 @@ void loraInitialise()
   {
     debugln("LoRa Runninng");
   }
+  LoRa.onReceive(onReceive);
 }
 
 String loraReceive()
