@@ -23,9 +23,23 @@ bool msgToSend = 0;
 #define RST 4
 #define DIO0 2
 
+String loraReceive()
+{
+  String receivedData;
+  while (LoRa.available())
+  {
+    receivedData = LoRa.readString();
+    debugln(receivedData);
+    msgToSend = 1;
+  }
+  return receivedData;
+}
+
 void onReceive(int packetSize)
 {
-  debugln("Iam Awake");
+  if (packetSize == 0)
+    return;
+  String loraData = loraReceive();
 }
 
 void loraInitialise()
@@ -44,22 +58,7 @@ void loraInitialise()
     debugln("LoRa Runninng");
   }
   LoRa.onReceive(onReceive);
-}
-
-String loraReceive()
-{
-  String receivedData;
-  if (LoRa.parsePacket())
-  {
-    while (LoRa.available())
-    {
-      receivedData = LoRa.readString();
-      debug("LoRa Received data:");
-      debugln(receivedData);
-      msgToSend = 1;
-    }
-  }
-  return receivedData;
+  LoRa.receive();
 }
 
 #include <WiFiClient.h>
@@ -91,25 +90,6 @@ void mqttInitialize()
     }
   }
   debugln("MQTT Connected");
-}
-
-void mqttPublish(String loraData)
-{
-  if (msgToSend)
-  {
-    debugln("MQTT data avalaible to send");
-    int strLenght = loraData.length() + 1;
-    char mqttData[strLenght];
-    loraData.toCharArray(mqttData, strLenght);
-    while (!client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password))
-      ;
-    debugln("MQTT reconnected");
-    while (!client.publish(topic, mqttData))
-    {
-      debugln("Sending MQTT data");
-    }
-    msgToSend = 0;
-  }
 }
 
 #include <WebServer.h>
@@ -371,7 +351,7 @@ void loop()
 
   ElegantOTA.loop();
 
-  String loraData = loraReceive();
+  loraReceive();
 
-  mqttPublish(loraData);
+  // mqttPublish(loraData);
 }
