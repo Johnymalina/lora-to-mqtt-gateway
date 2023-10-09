@@ -16,17 +16,31 @@ bool msgToSend = 0;
 
 #include <LoRa.h>
 
-#define SCK 14
-#define MISO 32
-#define MOSI 33
-#define SS 16
+// #define SCK 14
+// #define MISO 32
+// #define MOSI 33
+#define SS 5 // 16 for POE
 #define RST 4
 #define DIO0 2
+
+String receivedData;
+
+void onReceive(int packetSize)
+{
+  if (packetSize == 0)
+    return; // if there's no packet, return
+
+  while (LoRa.available())
+  {
+    receivedData = LoRa.readString();
+  }
+  msgToSend = 1;
+}
 
 void loraInitialise()
 {
   debugln("Connecting LoRa");
-  SPI.begin(SCK, MISO, MOSI, SS);
+  // SPI.begin(SCK, MISO, MOSI, SS);
   LoRa.setPins(SS, RST, DIO0);
   if (!LoRa.begin(868E6))
   {
@@ -38,22 +52,8 @@ void loraInitialise()
   {
     debugln("LoRa Runninng");
   }
-}
-
-String loraReceive()
-{
-  String receivedData;
-  if (LoRa.parsePacket())
-  {
-    while (LoRa.available())
-    {
-      receivedData = LoRa.readString();
-      debug("LoRa Received data:");
-      debugln(receivedData);
-      msgToSend = 1;
-    }
-  }
-  return receivedData;
+  LoRa.onReceive(onReceive);
+  LoRa.receive();
 }
 
 #include <WiFiClient.h>
@@ -361,11 +361,16 @@ void setup()
 
 void loop()
 {
+  if (msgToSend)
+  {
+    debug("LoRa Received data:");
+    debugln(receivedData);
+    msgToSend = 0;
+  }
+
   // server.handleClient();
 
   // ElegantOTA.loop();
-
-  // String loraData = loraReceive();
 
   // mqttPublish(loraData);
 }
