@@ -99,7 +99,6 @@ bool mqttPublish(String loraData)
   debugln("MQTT reconnected");
   if (client.publish(topic, mqttData))
   {
-    debugln("Published to MQTT");
     mqttSent = 1;
   }
 
@@ -368,9 +367,14 @@ void loop()
 
     if (mqttPublish(receivedData))
     {
+      debugln("Published to MQTT!");
       msgToSend = 0;
     }
-  }
+    else
+    {
+      debugln("MQTT Publish Failed!");
+    }
+    }
 
   // server.handleClient();
 
