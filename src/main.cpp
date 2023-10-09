@@ -348,24 +348,24 @@ void setup()
 
   loraInitialise();
 
-  wifiConnect();
+  // wifiConnect();
 
-  mqttInitialize();
+  // mqttInitialize();
 
-  ElegantOTA.begin(&server);
+  // ElegantOTA.begin(&server);
 
-  server.begin();
-  debugln("HTTP server started");
-  server.on("/", websitePublish);
+  // server.begin();
+  // debugln("HTTP server started");
+  // server.on("/", websitePublish);
 }
 
 void loop()
 {
-  server.handleClient();
+  // server.handleClient();
 
-  ElegantOTA.loop();
+  // ElegantOTA.loop();
 
-  String loraData = loraReceive();
+  // String loraData = loraReceive();
 
-  mqttPublish(loraData);
+  // mqttPublish(loraData);
 }
