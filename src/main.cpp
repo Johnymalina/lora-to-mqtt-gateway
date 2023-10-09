@@ -87,23 +87,23 @@ void mqttInitialize()
   debugln("MQTT Connected");
 }
 
-void mqttPublish(String loraData)
+bool mqttPublish(String loraData)
 {
-  if (msgToSend)
+  bool mqttSent;
+  debugln("MQTT data avalaible to send");
+  int strLenght = loraData.length() + 1;
+  char mqttData[strLenght];
+  loraData.toCharArray(mqttData, strLenght);
+  while (!client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password))
+    ;
+  debugln("MQTT reconnected");
+  if (client.publish(topic, mqttData))
   {
-    debugln("MQTT data avalaible to send");
-    int strLenght = loraData.length() + 1;
-    char mqttData[strLenght];
-    loraData.toCharArray(mqttData, strLenght);
-    while (!client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password))
-      ;
-    debugln("MQTT reconnected");
-    while (!client.publish(topic, mqttData))
-    {
-      debugln("Sending MQTT data");
-    }
-    msgToSend = 0;
+    debugln("Published to MQTT");
+    mqttSent = 1;
   }
+
+  return mqttSent;
 }
 
 #include <WebServer.h>
@@ -348,9 +348,9 @@ void setup()
 
   loraInitialise();
 
-  // wifiConnect();
+  wifiConnect();
 
-  // mqttInitialize();
+  mqttInitialize();
 
   // ElegantOTA.begin(&server);
 
@@ -365,12 +365,14 @@ void loop()
   {
     debug("LoRa Received data: ");
     debugln(receivedData);
-    msgToSend = 0;
+
+    if (mqttPublish(receivedData))
+    {
+      msgToSend = 0;
+    }
   }
 
   // server.handleClient();
 
   // ElegantOTA.loop();
-
-  // mqttPublish(loraData);
 }
