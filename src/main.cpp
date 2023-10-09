@@ -363,7 +363,7 @@ void loop()
 {
   if (msgToSend)
   {
-    debug("LoRa Received data:");
+    debug("LoRa Received data: ");
     debugln(receivedData);
     msgToSend = 0;
   }
