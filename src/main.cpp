@@ -59,7 +59,6 @@ void loraInitialise()
 #include <WiFiClient.h>
 #include <PubSubClient.h>
 const char *mqtt_broker = "10.10.42.4";
-const char *topic = "lora/mqtt";
 const char *mqtt_username = "mqtt-user";
 const char *mqtt_password = "HesloMqtt196455";
 const int mqtt_port = 1883;
@@ -87,7 +86,7 @@ void mqttInitialize()
   debugln("MQTT Connected");
 }
 
-bool mqttPublish(String loraData)
+bool mqttPublish(String loraData, const char *topic)
 {
   bool mqttSent;
   debugln("MQTT data avalaible to send");
@@ -142,16 +141,11 @@ WebServer server(80);
 
 unsigned long mqttTimer = 0;
 
+bool mqttConnected;
+bool loraConnected;
+
 void websitePublish()
 {
-
-  bool mqttConnected = client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
-  bool loraConnected = LoRa.begin(868E6);
-  debug("MQTT Status: ");
-  debugln(mqttConnected);
-  debug("LORA Status: ");
-  debugln(loraConnected);
-
   String ptr = "<!DOCTYPE html>\n";
   ptr += "<html>\n";
   ptr += "<head>\n";
@@ -345,7 +339,49 @@ void websitePublish()
 
 StaticJsonDocument<192> doc;
 
-String topics[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation", "lora2mqtt/bulshit"};
+String topics[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation"};
+
+unsigned long statusPublishTimer = 0;
+#define STATUS_PUBLISH_INTERVAL 20000
+
+// void()
+// {
+
+//   String gatewayStatus;
+
+//   const char *topic = "lora2mqtt/gateway";
+
+//   serializeJson(doc, gatewayStatus);
+
+//   int statusJsonlenght = gatewayStatus.length() + 1;
+//   char gatewayStatusChar[statusJsonlenght];
+//   gatewayPublishStatus.toCharArray(gatewayStatusChar, statusJsonlenght);
+
+//   client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
+//   client.publish(topic, gatewayStatusChar);
+// }
+
+void gatewayPublishStatus()
+{
+  StaticJsonDocument<32> doc;
+  String serverStatus;
+
+  mqttConnected = client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
+  loraConnected = LoRa.begin(868E6);
+
+  doc["lora"] = loraConnected;
+  doc["mqtt"] = mqttConnected;
+  serverStatus.remove(0);
+  serializeJson(doc, serverStatus);
+  debug("Server Status Json: ");
+  debugln(serverStatus);
+
+  int strLenght = serverStatus.length() + 1;
+  char serverStatusChar[strLenght];
+  serverStatus.toCharArray(serverStatusChar, strLenght);
+  const char *topic = "lora2mqtt/gateway";
+  client.publish(topic, serverStatusChar);
+}
 
 void setup()
 {
@@ -366,6 +402,12 @@ void setup()
 
 void loop()
 {
+  if (millis() > statusPublishTimer + STATUS_PUBLISH_INTERVAL)
+  {
+    gatewayPublishStatus();
+    statusPublishTimer = millis();
+  }
+
   if (msgToSend)
   {
     debug("LoRa Received data: ");
@@ -377,8 +419,9 @@ void loop()
       debugln("Data for Gateway");
       debug("Source: ");
       debugln(topics[addr]);
-
-      if (mqttPublish(receivedData))
+      String address = topics[addr];
+      const char *topic = address.c_str();
+      if (mqttPublish(receivedData, topic))
       {
         debugln("Published to MQTT!");
       }
