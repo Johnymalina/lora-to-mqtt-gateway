@@ -16,10 +16,10 @@ bool msgToSend = 0;
 
 #include <LoRa.h>
 
-// #define SCK 14
-// #define MISO 32
-// #define MOSI 33
-#define SS 5 // 16 for POE
+#define SCK 14
+#define MISO 32
+#define MOSI 33
+#define SS 5
 #define RST 4
 #define DIO0 2
 
@@ -341,6 +341,10 @@ void websitePublish()
   server.send(200, "text/html", ptr);
 }
 
+#include <ArduinoJson.h>
+
+StaticJsonDocument<192> doc;
+
 void setup()
 {
   debugBegin(9600);
@@ -364,6 +368,19 @@ void loop()
   {
     debug("LoRa Received data: ");
     debugln(receivedData);
+    deserializeJson(doc, receivedData);
+    int addr = doc["addr"];
+    int gtw = doc["gtw"];
+    double temp = doc["temp"];
+    double hum = doc["hum"];
+    double lux = doc["lux"];
+    double press = doc["press"];
+    double alt = doc["alt"];
+    debugln(addr);
+    debugln(gtw);
+    debugln(temp);
+    debugln(hum);
+    debugln(lux);
 
     if (mqttPublish(receivedData))
     {
@@ -374,7 +391,7 @@ void loop()
     {
       debugln("MQTT Publish Failed!");
     }
-    }
+  }
 
   // server.handleClient();
 
