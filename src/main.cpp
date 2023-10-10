@@ -345,9 +345,7 @@ void websitePublish()
 
 StaticJsonDocument<192> doc;
 
-byte adresses[] = {0, 1};
-
-String topics[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation"};
+String topics[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation", "lora2mqtt/bulshit"};
 
 void setup()
 {
@@ -373,28 +371,27 @@ void loop()
     debug("LoRa Received data: ");
     debugln(receivedData);
     deserializeJson(doc, receivedData);
-    if (!doc["gtw"])
+    if (!doc["dest"])
     {
       int addr = doc["addr"];
       debugln("Data for Gateway");
       debug("Source: ");
       debugln(topics[addr]);
+
+      if (mqttPublish(receivedData))
+      {
+        debugln("Published to MQTT!");
+      }
+      else
+      {
+        debugln("MQTT Publish Failed!");
+      }
     }
     else
     {
       debugln("Data for diferent device");
     }
-    
-
-    if (mqttPublish(receivedData))
-    {
-      debugln("Published to MQTT!");
-      msgToSend = 0;
-    }
-    else
-    {
-      debugln("MQTT Publish Failed!");
-    }
+    msgToSend = 0;
   }
 
   // server.handleClient();
