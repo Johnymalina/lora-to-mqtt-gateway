@@ -19,7 +19,7 @@ bool msgToSend = 0;
 #define SCK 14
 #define MISO 32
 #define MOSI 33
-#define SS 5
+#define SS 16
 #define RST 4
 #define DIO0 2
 
@@ -40,7 +40,7 @@ void onReceive(int packetSize)
 void loraInitialise()
 {
   debugln("Connecting LoRa");
-  // SPI.begin(SCK, MISO, MOSI, SS);
+  SPI.begin(SCK, MISO, MOSI, SS);
   LoRa.setPins(SS, RST, DIO0);
   if (!LoRa.begin(868E6))
   {
@@ -345,6 +345,10 @@ void websitePublish()
 
 StaticJsonDocument<192> doc;
 
+byte adresses[] = {0, 1};
+
+String topics[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation"};
+
 void setup()
 {
   debugBegin(9600);
@@ -369,18 +373,18 @@ void loop()
     debug("LoRa Received data: ");
     debugln(receivedData);
     deserializeJson(doc, receivedData);
-    int addr = doc["addr"];
-    int gtw = doc["gtw"];
-    double temp = doc["temp"];
-    double hum = doc["hum"];
-    double lux = doc["lux"];
-    double press = doc["press"];
-    double alt = doc["alt"];
-    debugln(addr);
-    debugln(gtw);
-    debugln(temp);
-    debugln(hum);
-    debugln(lux);
+    if (!doc["gtw"])
+    {
+      int addr = doc["addr"];
+      debugln("Data for Gateway");
+      debug("Source: ");
+      debugln(topics[addr]);
+    }
+    else
+    {
+      debugln("Data for diferent device");
+    }
+    
 
     if (mqttPublish(receivedData))
     {
