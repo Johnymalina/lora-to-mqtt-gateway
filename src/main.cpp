@@ -344,23 +344,6 @@ String topics[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation"};
 unsigned long statusPublishTimer = 0;
 #define STATUS_PUBLISH_INTERVAL 20000
 
-// void()
-// {
-
-//   String gatewayStatus;
-
-//   const char *topic = "lora2mqtt/gateway";
-
-//   serializeJson(doc, gatewayStatus);
-
-//   int statusJsonlenght = gatewayStatus.length() + 1;
-//   char gatewayStatusChar[statusJsonlenght];
-//   gatewayPublishStatus.toCharArray(gatewayStatusChar, statusJsonlenght);
-
-//   client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
-//   client.publish(topic, gatewayStatusChar);
-// }
-
 void gatewayPublishStatus()
 {
   StaticJsonDocument<32> doc;
