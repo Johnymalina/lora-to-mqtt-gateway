@@ -342,7 +342,7 @@ StaticJsonDocument<192> doc;
 String topics[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation"};
 
 unsigned long statusPublishTimer = 0;
-#define STATUS_PUBLISH_INTERVAL 20000
+#define STATUS_PUBLISH_INTERVAL 60000
 
 void gatewayPublishStatus()
 {
@@ -351,6 +351,7 @@ void gatewayPublishStatus()
 
   mqttConnected = client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
   loraConnected = LoRa.begin(868E6);
+  LoRa.receive();
 
   doc["lora"] = loraConnected;
   doc["mqtt"] = mqttConnected;
@@ -376,11 +377,11 @@ void setup()
 
   mqttInitialize();
 
-  // ElegantOTA.begin(&server);
+  ElegantOTA.begin(&server);
 
-  // server.begin();
-  // debugln("HTTP server started");
-  // server.on("/", websitePublish);
+  server.begin();
+  debugln("HTTP server started");
+  server.on("/", websitePublish);
 }
 
 void loop()
@@ -420,7 +421,7 @@ void loop()
     msgToSend = 0;
   }
 
-  // server.handleClient();
+  server.handleClient();
 
-  // ElegantOTA.loop();
+  ElegantOTA.loop();
 }
