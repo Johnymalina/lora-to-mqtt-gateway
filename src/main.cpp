@@ -1,16 +1,6 @@
-#define DEBUG 1
+#include <config.h>
 
-#if DEBUG == 1
-#define debug(x) Serial.print(x)
-#define debugln(x) Serial.println(x)
-#define debugBegin(x) Serial.begin(x)
-#else
-#define debug(x)
-#define debugln(x)
-#define debugBegin(x)
-#endif
-
-#include <Arduino.h>
+#define DEBUG 1 // INFO Set if the Serial output will be avalaible (1) or not (0)
 
 bool msgToSend = 0;
 
