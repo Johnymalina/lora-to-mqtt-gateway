@@ -1,6 +1,5 @@
-#pragma once
-
-#include <Arduino.h>
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #if DEBUG == 1
 #define debug(x) Serial.print(x)
@@ -12,3 +11,4 @@
 #define debugBegin(x)
 #endif
 
+#endif

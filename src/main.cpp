@@ -1,6 +1,7 @@
-#include <config.h>
-
 #define DEBUG 1 // INFO Set if the Serial output will be avalaible (1) or not (0)
+
+#include <Arduino.h>
+#include <Config.h>
 
 bool msgToSend = 0;
 
