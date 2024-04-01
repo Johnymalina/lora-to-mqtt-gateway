@@ -2,21 +2,9 @@
 
 #include <Arduino.h>
 #include <Config.h>
+#include <Lora_handler.h>
 
-bool msgToSend = 0;
-
-#include <LoRa.h>
-
-#define SCK 14
-#define MISO 32
-#define MOSI 33
-#define SS 16
-#define RST 4
-#define DIO0 2
-
-String receivedData;
-
-void onReceive(int packetSize)
+void loraOnReceive(int packetSize)
 {
   if (packetSize == 0)
     return; // if there's no packet, return
@@ -43,7 +31,7 @@ void loraInitialise()
   {
     debugln("LoRa Runninng");
   }
-  LoRa.onReceive(onReceive);
+  LoRa.onReceive(loraOnReceive);
   LoRa.receive();
 }
 
