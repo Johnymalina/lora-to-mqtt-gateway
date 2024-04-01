@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#if DEBUG == 1
+#ifdef DEBUG
 #define debug(x) Serial.print(x)
 #define debugln(x) Serial.println(x)
 #define debugBegin(x) Serial.begin(x)

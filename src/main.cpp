@@ -1,4 +1,4 @@
-#define DEBUG 1 // INFO Set if the Serial output will be avalaible (1) or not (0)
+#define DEBUG // INFO Uncomment to enable Serial Debug
 
 #include <Arduino.h>
 #include <Config.h>
