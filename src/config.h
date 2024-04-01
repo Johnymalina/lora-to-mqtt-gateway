@@ -1,8 +1,8 @@
-#pragma once
-
+#ifndef CONFIG_H
+#define CONFIG_G
 #include <Arduino.h>
 
-#if DEBUG == 1
+#ifdef DEBUG
 #define debug(x) Serial.print(x)
 #define debugln(x) Serial.println(x)
 #define debugBegin(x) Serial.begin(x)
@@ -12,3 +12,4 @@
 #define debugBegin(x)
 #endif
 
+#endif

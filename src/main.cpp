@@ -1,6 +1,5 @@
-#include <config.h>
-
-#define DEBUG 1 // INFO Set if the Serial output will be avalaible (1) or not (0)
+#define DEBUG // INFO Set if the Serial output will be avalaible (1) or not (0)
+#include "config.h"
 
 bool msgToSend = 0;
 
@@ -148,35 +147,6 @@ bool mqttPublish(String loraData, const char *topic)
 #include <WebServer.h>
 
 #include <ElegantOTA.h>
-
-#include <WiFi.h>
-const char *ssid = "TheHorde";
-const char *password = "Mylifeforthehorde";
-
-void wifiConnect()
-{
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  int counterWifi = 0;
-  debug("Connecting WiFi");
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    debug(".");
-    delay(200);
-    if (++counterWifi > 100)
-    {
-      debugln("");
-      debugln("Cant connect to WiFi... Restarting");
-      delay(100);
-      ESP.restart();
-    }
-  }
-  debugln("");
-  debug("WiFi Connected to network: ");
-  debugln(WiFi.SSID());
-  debug("IP address: ");
-  debugln(WiFi.localIP());
-}
 
 WebServer server(80);
 
