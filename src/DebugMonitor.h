@@ -13,7 +13,6 @@ public:
     void end();
 
 private:
-    // Data members
 };
 
 #endif
