@@ -56,6 +56,7 @@ AsyncWebServer server(80);
 
 void setup()
 {
+  debug.begin();
   debug.info("RUNNING");
 
   // wifiConnect();

@@ -1,9 +1,8 @@
 #include <Arduino.h>
 #include <DebugMonitor.h>
 
-DebugMonitor::DebugMonitor(unsigned int baudRate)
+DebugMonitor::DebugMonitor()
 {
-    Serial.begin(baudRate);
 }
 
 void DebugMonitor::begin(unsigned int baudRate)

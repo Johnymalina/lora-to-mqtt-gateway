@@ -6,7 +6,7 @@
 class DebugMonitor
 {
 public:
-    DebugMonitor(unsigned int baudRate = 9600);
+    DebugMonitor();
     void begin(unsigned int baudRate = 9600);
     void info(String debugMsg);
     void error(String debugMsg);
