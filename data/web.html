@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>ESP32 LoRa2MQTT Gateway</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Add FontAwesome CSS -->
     <style>
         /* Reset default margin and padding */
         body, h1, h2, ul, li {
@@ -145,38 +146,41 @@
             display: inline-block;
             width: 40px;
             height: 20px;
-            background-color: #ccc;
+            background-color: #007bff; /* Blue color for the toggle */
             border-radius: 20px;
             position: relative;
             cursor: pointer;
         }
 
-        .theme-switch label::after {
+        .theme-switch label::before {
             content: '';
             position: absolute;
-            width: 20px;
-            height: 20px;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background-color: #fff; /* White color for the toggle button */
             border-radius: 50%;
-            background-color: #fff;
-            top: 0;
-            left: 0;
             transition: transform 0.3s;
         }
 
-        .theme-switch input[type="checkbox"]:checked + label {
-            background-color: #007bff;
+        .theme-switch input[type="checkbox"]:checked + label::before {
+            transform: translateX(20px); /* Move the toggle button to the right */
         }
 
-        .theme-switch input[type="checkbox"]:checked + label::after {
-            transform: translateX(20px);
+        /* Icon style */
+        .icon {
+            margin: 0 5px; /* Adjust margin for icons */
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="theme-switch">
+            <i class="fas fa-sun icon"></i>
             <input type="checkbox" id="toggle-theme" checked>
             <label for="toggle-theme"></label>
+            <i class="fas fa-moon icon"></i>
         </div>
         <a href="/update" class="update-fw-button new-button-style">Update FW</a>
         <img src="/lora2mqtt.png" alt="LoRa2MQTT Logo" style="max-width: 200px; margin-bottom: 20px;">
@@ -215,7 +219,7 @@
         function displayCurrentTime() {
             const currentTimeElement = document.getElementById('current-time');
             const now = new Date();
-            const formattedTime = now.toLocaleString('cs-CS', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const formattedTime = now.toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
             currentTimeElement.textContent = `Current Time: ${formattedTime}`;
         }
 
@@ -227,7 +231,7 @@
 
         // Set status colors directly with variables
         document.documentElement.style.setProperty('--mqtt-color', 'green'); // Change to 'red' for "error"
-        document.documentElement.style.setProperty('--lora-color', 'green'); // Change to 'green' for "ok"
+        document.documentElement.style.setProperty('--lora-color', 'red'); // Change to 'green' for "ok"
 
         // Update the current time every second
         setInterval(displayCurrentTime, 1000);
