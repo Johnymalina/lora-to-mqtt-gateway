@@ -21,8 +21,6 @@ public:
     DebugMonitor debug;
 
 private:
-    static bool _eth_connected;
-    static void WiFiEvent(WiFiEvent_t event);
 };
 
 #endif
