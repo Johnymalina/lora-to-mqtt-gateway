@@ -7,11 +7,10 @@ DebugMonitor debug;
 
 NetworkConnection network;
 
-
-
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <ElegantOTA.h>
+#include <SPIFFS.h>
 
 AsyncWebServer server(80);
 
@@ -21,13 +20,15 @@ void setup()
 
   network.begin();
 
-  
+  SPIFFS.begin(true);
 
-  // server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-  //           { request->send(200, "text/plain", "Hi! I am ESP32."); });
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/web.html"); });
+  server.on("/lora2mqtt.png", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/lora2mqtt.png", "image/png"); });
 
-  // ElegantOTA.begin(&server); // Start ElegantOTA
-  // server.begin();
+  ElegantOTA.begin(&server); // Start ElegantOTA
+  server.begin();
 }
 
 void loop()
