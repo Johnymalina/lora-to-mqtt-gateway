@@ -45,25 +45,24 @@ void loraInitialise()
   LoRa.receive();
 }
 
-// #define ETH_CLK_MODE ETH_CLOCK_GPIO17_OUT
-// #define ETH_PHY_POWER -1
-// #define ETH_PHY_TYPE ETH_PHY_LAN8720
-// #define ETH_PHY_ADDR 0
-// #define ETH_PHY_MDC 23
-// #define ETH_PHY_MDIO 18
-// #define NRST 5
+#define ETH_CLK_MODE ETH_CLOCK_GPIO17_OUT
+#define ETH_PHY_POWER -1
+#define ETH_PHY_TYPE ETH_PHY_LAN8720
+#define ETH_PHY_ADDR 0
+#define ETH_PHY_MDC 23
+#define ETH_PHY_MDIO 18
 
 #include <WiFiClient.h>
 #include <PubSubClient.h>
 #include <ETH.h>
 
-#define ETH_CLK_MODE ETH_CLOCK_GPIO17_OUT
-#define ETH_POWER_PIN -1
-#define ETH_TYPE ETH_PHY_LAN8720
-#define ETH_ADDR 0
-#define ETH_MDC_PIN 23
-#define ETH_MDIO_PIN 18
-#define NRST 5
+// #define ETH_CLK_MODE ETH_CLOCK_GPIO17_OUT
+// #define ETH_POWER_PIN -1
+// #define ETH_TYPE ETH_PHY_LAN8720
+// #define ETH_ADDR 0
+// #define ETH_MDC_PIN 23
+// #define ETH_MDIO_PIN 18
+// #define NRST 5
 
 const char *mqtt_broker = "10.10.42.4";
 const char *mqtt_username = "mqtt-user";
@@ -394,7 +393,7 @@ void setup()
 
   // wifiConnect();
   WiFi.onEvent(WiFiEvent);
-  ETH.begin(ETH_ADDR, ETH_POWER_PIN, ETH_MDC_PIN, ETH_MDIO_PIN, ETH_TYPE, ETH_CLK_MODE);
+  ETH.begin();
   ETH.config(IPAddress(10, 10, 42, 5), IPAddress(10, 10, 42, 1), IPAddress(255, 255, 255, 0));
   mqttInitialize();
 
