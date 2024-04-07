@@ -7,6 +7,7 @@
 #define ETH_PHY_ADDR 0
 #define ETH_PHY_MDC 23
 #define ETH_PHY_MDIO 18
+#define NRST 5
 
 #include <Arduino.h>
 #include <WiFiClient.h>
