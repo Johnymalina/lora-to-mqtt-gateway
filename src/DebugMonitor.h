@@ -4,7 +4,7 @@
 #define DEBUG_BAUD_RATE 9600
 
 #define DEBUG
-#define DEBUG_LVL 1 // INFO Debug level 1=INFO, 2=ERROR
+#define DEBUG_LVL 2 // INFO Debug level 1=INFO, 2=ERROR
 
 #ifdef DEBUG
 #define debug(x) Serial.print(x)
