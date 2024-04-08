@@ -1,3 +1,19 @@
+/*
+
+Name: Lora2Mqtt Gateway
+
+Author: Jakub Čihánek
+
+First created: 08.04.2024 14:54
+
+Version: 1
+
+Last Updated: 08.04.2024
+
+Description: Main station for converting LoRa messages to MQTT for use in HomeAssistant
+
+*/
+
 #include <Arduino.h>
 
 #include <DebugMonitor.h>
