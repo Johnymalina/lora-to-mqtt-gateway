@@ -20,7 +20,6 @@ public:
     NetworkConnection();
     void begin();
     void setCallback();
-    DebugMonitor debug;
 
 private:
 };

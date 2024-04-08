@@ -1,18 +1,19 @@
 #ifndef DEBUG_MONITOR_H
 #define DEBUG_MONITOR_H
 
-#include <Arduino.h>
+#define DEBUG_BAUD_RATE 9600
 
-class DebugMonitor
-{
-public:
-    DebugMonitor();
-    void begin(unsigned int baudRate = 9600);
-    void info(String debugMsg);
-    void error(String debugMsg);
-    void end();
+#define DEBUG
+#define DEBUG_LVL 1 // INFO Debug level 1=INFO, 2=ERROR
 
-private:
-};
+#ifdef DEBUG
+#define debug(x) Serial.print(x)
+#define debugln(x) Serial.println(x)
+#define debugBegin(x) Serial.begin(x)
+#else
+#define debug(x)
+#define debugln(x)
+#define debugBegin(x)
+#endif
 
 #endif

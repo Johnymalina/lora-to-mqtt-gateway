@@ -1,23 +1,32 @@
-// #include <Arduino.h>
-#include <DebugMonitor.h>
+#include <Arduino.h>
 
-DebugMonitor debug;
+#include <DebugMonitor.h>
 
 #include <NetworkConnection.h>
 
 NetworkConnection network;
 
 #include <AsyncTCP.h>
+
 #include <ESPAsyncWebServer.h>
+
 #include <ElegantOTA.h>
+
 #include <SPIFFS.h>
 
 AsyncWebServer server(80);
 
 void setup()
 {
-  debug.begin();
-  
+  debugBegin(DEBUG_BAUD_RATE);
+
+  delay(1000);
+
+#ifdef DEBUG
+  debug("INFO: ");
+  debugln("Debug Monitor Started");
+#endif
+
   network.setCallback();
 
   network.begin();
