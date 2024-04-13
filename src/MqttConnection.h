@@ -14,7 +14,7 @@ class MqttConnection
 public:
     MqttConnection();
     void begin();
-    void publish();
+    bool publish(const char *payload, const char *topic);
 
 private:
     const char *mqtt_broker = MQTT_BROKER_IP;
