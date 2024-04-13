@@ -66,6 +66,8 @@ void NetworkConnection::begin()
     ETH.begin();
 
     ETH.config(IPAddress(10, 10, 42, 5), IPAddress(10, 10, 42, 1), IPAddress(255, 255, 255, 0));
+
+    // TODO Fallback WLAN connection when ethernet is not avalaible
 }
 
 void NetworkConnection::setCallback()
@@ -79,3 +81,5 @@ void NetworkConnection::setCallback()
 
     WiFi.onEvent(WiFiEvent);
 }
+
+// TODO Periodicaly check connection status wlan/ethernet. Make sense to add also if connected when its not possible to publish this status wehn network is not connected?
