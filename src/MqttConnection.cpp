@@ -16,7 +16,7 @@ void MqttConnection::begin()
 #ifdef DEBUG
 
     debug("INFO: ");
-    debug("MQTT Connecting");
+    debugln("MQTT Connecting");
 
 #endif
 
