@@ -1,4 +1,0 @@
-[wokwi]
-version = 1
-firmware = '.pio\build\liligo-poe\firmware.bin'
-elf = '.pio\build\liligo-poe\firmware.elf'
