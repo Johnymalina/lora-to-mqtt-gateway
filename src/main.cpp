@@ -73,4 +73,19 @@ void setup()
 
 void loop()
 {
+  if (msgToSend)
+  {
+
+#ifdef DEBUG
+
+    debug("INFO: ");
+    debugln("LoRa message received");
+    debug("INFO: ");
+    debug("Message: ");
+    debugln(receivedData);
+
+#endif
+
+    msgToSend = 0;
+    }
 }

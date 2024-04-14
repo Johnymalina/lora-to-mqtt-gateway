@@ -1,7 +1,7 @@
 #include <LoraConnection.h>
 
 String receivedData;
-bool msgToSend;
+bool msgToSend = false;
 
 void onReceive(int packetSize)
 {

@@ -21,4 +21,7 @@ public:
 private:
 };
 
+extern String receivedData;
+extern bool msgToSend;
+
 #endif
