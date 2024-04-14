@@ -30,9 +30,13 @@ Description: Main station for converting LoRa messages to MQTT for use in HomeAs
 
 #include <MqttConnection.h>
 
+#include <LoraConnection.h>
+
 NetworkConnection network;
 
 MqttConnection mqtt;
+
+LoraConnection lora;
 
 AsyncWebServer server(80);
 
@@ -52,6 +56,8 @@ void setup()
   network.begin();
 
   mqtt.begin();
+
+  lora.begin();
 
   SPIFFS.begin(true);
 
