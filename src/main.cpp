@@ -54,7 +54,7 @@ void setup()
 #endif
 
   wdebugBegin(&server);
-  WebSerial.msgCallback(recvMsg);
+  wdebugCallback(recvMsg);
 
   network.setCallback();
 
@@ -88,7 +88,13 @@ void loop()
     debug("INFO: ");
     debug("Message: ");
     debugln(receivedData);
-    WebSerial.println(receivedData);
+
+    wdebug("INFO: ");
+    wdebugln("LoRa message received");
+    wdebug("INFO: ");
+    wdebug("Message: ");
+    wdebugln(receivedData);
+
 #endif
 
     msgToSend = 0;

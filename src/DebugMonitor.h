@@ -15,6 +15,7 @@
 #define wdebug(x) WebSerial.print(x)
 #define wdebugln(x) WebSerial.println(x)
 #define wdebugBegin(x) WebSerial.begin(x)
+#define wdebugCallback(x) WebSerial.msgCallback(x)
 #else
 #define debug(x)
 #define debugln(x)

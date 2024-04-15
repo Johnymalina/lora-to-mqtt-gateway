@@ -18,6 +18,9 @@ void MqttConnection::begin()
     debug("INFO: ");
     debugln("MQTT Connecting");
 
+    wdebug("INFO: ");
+    wdebugln("MQTT Connecting");
+
 #endif
 
     int counterMqtt = 0;
