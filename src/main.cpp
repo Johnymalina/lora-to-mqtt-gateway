@@ -46,7 +46,7 @@ void setup()
 {
   debugBegin(DEBUG_BAUD_RATE);
 
-  delay(1000);
+  delay(200);
 
 #ifdef DEBUG
   debug("INFO: ");
