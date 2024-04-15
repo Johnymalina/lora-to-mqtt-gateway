@@ -32,6 +32,8 @@ Description: Main station for converting LoRa messages to MQTT for use in HomeAs
 
 #include <LoraConnection.h>
 
+#include <WebSerial.h>
+
 NetworkConnection network;
 
 MqttConnection mqtt;
@@ -39,6 +41,16 @@ MqttConnection mqtt;
 LoraConnection lora;
 
 AsyncWebServer server(80);
+
+void recvMsg(uint8_t *data, size_t len)
+{
+  WebSerial.println("Received Data...");
+  String d = "";
+  for (int i = 0; i < len; i++)
+  {
+    d += char(data[i]);
+  }
+}
 
 void setup()
 {
@@ -50,6 +62,9 @@ void setup()
   debug("INFO: ");
   debugln("Debug Monitor Started");
 #endif
+
+  WebSerial.begin(&server);
+  WebSerial.msgCallback(recvMsg);
 
   network.setCallback();
 
@@ -69,6 +84,8 @@ void setup()
   ElegantOTA.begin(&server);
 
   server.begin();
+
+  WebSerial.println("Hello!");
 }
 
 void loop()
@@ -83,9 +100,9 @@ void loop()
     debug("INFO: ");
     debug("Message: ");
     debugln(receivedData);
-
+    WebSerial.println(receivedData);
 #endif
 
     msgToSend = 0;
-    }
+  }
 }

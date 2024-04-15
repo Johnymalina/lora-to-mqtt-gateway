@@ -1,6 +1,8 @@
 #ifndef DEBUG_MONITOR_H
 #define DEBUG_MONITOR_H
 
+#include <WebSerial.h>
+
 #define DEBUG_BAUD_RATE 9600
 
 #define DEBUG
