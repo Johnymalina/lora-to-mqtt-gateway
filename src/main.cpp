@@ -71,6 +71,12 @@ void setup()
   server.on("/lora2mqtt.png", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/lora2mqtt.png", "image/png"); });
 
+  server.on("/reboot", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    request->redirect("/");
+    delay(100);
+    ESP.restart(); });
+
   ElegantOTA.begin(&server);
 
   server.begin();
