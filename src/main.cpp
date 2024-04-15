@@ -68,6 +68,7 @@ void setup()
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/web.html"); });
+
   server.on("/lora2mqtt.png", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/lora2mqtt.png", "image/png"); });
 
