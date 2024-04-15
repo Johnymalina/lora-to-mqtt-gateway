@@ -10,19 +10,33 @@ void WiFiEvent(WiFiEvent_t event)
     {
     case ARDUINO_EVENT_ETH_START:
         ETH.setHostname("lora2mqtt-gateway");
+
 #ifdef DEBUG
+
         debug("INFO: ");
         debugln("Ethernet Network Started");
+
+        wdebug("INFO: ");
+        wdebugln("Ethernet Network Started");
+
 #endif
         break;
     case ARDUINO_EVENT_ETH_CONNECTED:
+
 #ifdef DEBUG
+
         debug("INFO: ");
         debugln("Ethernet Network Connected");
+
+        wdebug("INFO: ");
+        wdebugln("Ethernet Network Connected");
+
 #endif
+
         break;
 
     case ARDUINO_EVENT_ETH_GOT_IP:
+
 #ifdef DEBUG
 
         debug("INFO: ");
@@ -35,20 +49,44 @@ void WiFiEvent(WiFiEvent_t event)
         debug(", Speed: ");
         debug(ETH.linkSpeed());
         debugln("Mbps");
+
+        wdebug("INFO: ");
+        wdebug("Ethernet IPv4: ");
+        wdebug(ETH.localIP());
+        wdebug(", Hostname: ");
+        wdebug(ETH.getHostname());
+        wdebug(", MAC: ");
+        wdebug(ETH.macAddress());
+        wdebug(", Speed: ");
+        wdebug(ETH.linkSpeed());
+        wdebugln("Mbps");
+
 #endif
+
         eth_connected = true;
         break;
     case ARDUINO_EVENT_ETH_DISCONNECTED:
 
 #ifdef DEBUG
+
         debugln("ETH Disconnected");
+
+        wdebugln("ETH Disconnected");
+
 #endif
+
         eth_connected = false;
         break;
     case ARDUINO_EVENT_ETH_STOP:
+
 #ifdef DEBUG
+
         debugln("ETH Stopped");
+
+        wdebugln("ETH Stopped");
+
 #endif
+
         eth_connected = false;
         break;
 
@@ -72,10 +110,14 @@ void NetworkConnection::begin()
 
 void NetworkConnection::setCallback()
 {
+
 #ifdef DEBUG
 
     debug("INFO: ");
     debugln("Network Callback Setup");
+
+    wdebug("INFO: ");
+    wdebugln("Network Callback Setup");
 
 #endif
 

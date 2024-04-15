@@ -30,6 +30,9 @@ void LoraConnection::begin()
     debug("INFO: ");
     debug("LoRa Connecting");
 
+    wdebug("INFO: ");
+    wdebug("LoRa Connecting");
+
 #endif
 
     int counterLora = 0;
@@ -37,16 +40,21 @@ void LoraConnection::begin()
     while (!LoRa.begin(868E6))
     {
         debug(".");
+        wdebug(".");
         delay(200);
         if (++counterLora > 100)
         {
             debugln("");
+            wdebugln("");
 
 #ifdef DEBUG
 #if DEBUG_LVL > 1
 
             debug("ERROR: ");
             debugln("Cant connect to LoRa... Restarting");
+
+            wdebug("ERROR: ");
+            wdebugln("Cant connect to LoRa... Restarting");
 
 #endif
 #endif
@@ -61,6 +69,10 @@ void LoraConnection::begin()
     debugln("");
     debug("INFO: ");
     debugln("LoRa Connected");
+
+    wdebugln("");
+    wdebug("INFO: ");
+    wdebugln("LoRa Connected");
 
 #endif
 
