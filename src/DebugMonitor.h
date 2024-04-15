@@ -12,10 +12,18 @@
 #define debug(x) Serial.print(x)
 #define debugln(x) Serial.println(x)
 #define debugBegin(x) Serial.begin(x)
+#define wdebug(x) WebSerial.print(x)
+#define wdebugln(x) WebSerial.println(x)
+#define wdebugBegin(x) WebSerial.begin(x)
 #else
 #define debug(x)
 #define debugln(x)
 #define debugBegin(x)
+#define wdebug(x)
+#define wdebugln(x)
+#define wdebugBegin(x)
 #endif
+
+void recvMsg(uint8_t *data, size_t len);
 
 #endif
