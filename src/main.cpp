@@ -34,6 +34,8 @@ Description: Main station for converting LoRa messages to MQTT for use in HomeAs
 
 #include <DebugMonitor.h>
 
+#include <JsonHandler.h>
+
 NetworkConnection network;
 
 MqttConnection mqtt;
@@ -41,6 +43,30 @@ MqttConnection mqtt;
 LoraConnection lora;
 
 AsyncWebServer server(80);
+
+unsigned long gatewayStatusTimer = 0;
+#define STATUS_PUBLISH_INTERVAL 10000
+
+void gatewayPublishStatus()
+{
+  StaticJsonDocument<32> doc;
+  String serverStatus;
+
+  doc["lora"] = mqtt.getStatus();
+  doc["mqtt"] = lora.getStatus();
+
+  serverStatus.remove(0);
+
+  serializeJson(doc, serverStatus);
+  wdebug("Server Status Json: ");
+  wdebugln(serverStatus);
+
+  int strLenght = serverStatus.length() + 1;
+  char serverStatusChar[strLenght];
+  serverStatus.toCharArray(serverStatusChar, strLenght);
+  const char *topic = "lora2mqtt/gateway";
+  mqtt.publish(serverStatusChar,topic);
+}
 
 void setup()
 {
@@ -87,6 +113,13 @@ void setup()
 
 void loop()
 {
+
+  if (millis() > gatewayStatusTimer + STATUS_PUBLISH_INTERVAL)
+  {
+    gatewayPublishStatus();
+    gatewayStatusTimer = millis();
+  }
+
   if (msgToSend)
   {
 

@@ -85,11 +85,13 @@ bool MqttConnection::publish(const char *payload, const char *topic)
 
     wdebug("INFO: ");
     wdebug("MQTT Client reconnected. Sending data to broker");
+    wdebugln(payload);
+    wdebugln(topic);
 
 #endif
 
     int counterPublish = 0;
-    while (client.publish(topic, payload))
+    while (!client.publish(topic, payload))
     {
         debug(".");
         wdebug(".");
