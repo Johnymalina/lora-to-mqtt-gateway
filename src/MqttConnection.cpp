@@ -119,3 +119,10 @@ bool MqttConnection::publish(const char *payload, const char *topic)
     mqttSent = true;
     return mqttSent;
 }
+
+bool MqttConnection::getStatus()
+{
+    bool mqttConnected = client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
+
+    return mqttConnected;
+}
