@@ -17,6 +17,7 @@ class LoraConnection
 public:
     LoraConnection();
     void begin();
+    bool getStatus();
 
 private:
 };

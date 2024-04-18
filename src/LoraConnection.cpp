@@ -79,3 +79,11 @@ void LoraConnection::begin()
     LoRa.onReceive(onReceive);
     LoRa.receive();
 }
+
+bool LoraConnection::getStatus()
+{
+    bool loraConnected = LoRa.begin(868E6);
+    LoRa.receive();
+
+    return loraConnected;
+}
