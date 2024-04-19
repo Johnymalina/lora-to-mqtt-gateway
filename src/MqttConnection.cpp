@@ -78,6 +78,7 @@ bool MqttConnection::publish(const char *payload, const char *topic)
 
     while (!client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password))
         ;
+
 #ifdef DEBUG
 
     debug("INFO: ");
@@ -85,8 +86,6 @@ bool MqttConnection::publish(const char *payload, const char *topic)
 
     wdebug("INFO: ");
     wdebug("MQTT Client reconnected. Sending data to broker");
-    wdebugln(payload);
-    wdebugln(topic);
 
 #endif
 
@@ -117,6 +116,18 @@ bool MqttConnection::publish(const char *payload, const char *topic)
             return false;
         }
     }
+
+#ifdef DEBUG
+
+    debugln("");
+    debug("INFO: ");
+    debugln("Data sent successfully");
+
+    wdebugln("");
+    wdebug("INFO: ");
+    wdebugln("Data sent successfully");
+
+#endif
 
     mqttSent = true;
     return mqttSent;
