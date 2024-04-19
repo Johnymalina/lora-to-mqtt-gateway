@@ -45,27 +45,37 @@ LoraConnection lora;
 AsyncWebServer server(80);
 
 unsigned long gatewayStatusTimer = 0;
-#define STATUS_PUBLISH_INTERVAL 10000
+#define STATUS_PUBLISH_INTERVAL 60000
 
 void gatewayPublishStatus()
 {
   StaticJsonDocument<32> doc;
-  String serverStatus;
+  String gatewayStatus;
 
   doc["lora"] = mqtt.getStatus();
   doc["mqtt"] = lora.getStatus();
 
-  serverStatus.remove(0);
+  gatewayStatus.remove(0);
 
-  serializeJson(doc, serverStatus);
-  wdebug("Server Status Json: ");
-  wdebugln(serverStatus);
+  serializeJson(doc, gatewayStatus);
 
-  int strLenght = serverStatus.length() + 1;
-  char serverStatusChar[strLenght];
-  serverStatus.toCharArray(serverStatusChar, strLenght);
+#ifdef DEBUG
+
+  debug("INFO: ");
+  debug("Gateway Status: ");
+  debugln(gatewayStatus);
+
+  wdebug("INFO: ");
+  wdebug("Gateway Status: ");
+  wdebugln(gatewayStatus);
+
+#endif
+
+  int strLenght = gatewayStatus.length() + 1;
+  char gatewayStatusChar[strLenght];
+  gatewayStatus.toCharArray(gatewayStatusChar, strLenght);
   const char *topic = "lora2mqtt/gateway";
-  mqtt.publish(serverStatusChar,topic);
+  mqtt.publish(gatewayStatusChar, topic);
 }
 
 void setup()
