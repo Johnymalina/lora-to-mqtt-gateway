@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 12.7 12.7"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="lora2mqtt-test.svg"
+   inkscape:label="box"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true"
+     inkscape:bbox-paths="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:object-paths="true"
+     inkscape:object-nodes="true"
+     inkscape:snap-intersection-paths="true"
+     inkscape:snap-smooth-nodes="true"
+     inkscape:snap-midpoints="true"
+     inkscape:snap-object-midpoints="true"
+     inkscape:snap-center="true"
+     inkscape:snap-text-baseline="true"
+     inkscape:snap-page="true"
+     inkscape:zoom="15.155664"
+     inkscape:cx="5.839401"
+     inkscape:cy="6.6971661"
+     inkscape:window-width="3840"
+     inkscape:window-height="2067"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     units="px" />
+  <defs
+     id="defs2">
+    <rect
+       x="392.49124"
+       y="408.90155"
+       width="149.26862"
+       height="51.556885"
+       id="rect4821" />
+    <inkscape:path-effect
+       effect="copy_rotate"
+       starting_point="162.44,96.31944"
+       origin="62.44,96.31944"
+       id="path-effect4080"
+       is_visible="true"
+       lpeversion="1"
+       method="normal"
+       num_copies="6"
+       starting_angle="0"
+       rotation_angle="60"
+       gap="-0.3"
+       copies_to_360="true"
+       mirror_copies="false"
+       split_items="false" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="15.174789"
+       height="52.687604"
+       patternTransform="translate(186.49791,334.92978)"
+       id="pattern2186">
+      <g
+         id="g2184"
+         transform="matrix(3.7795276,0,0,3.7795276,-186.49791,-334.92978)">
+        <path
+           style="fill:#ffcc00;stroke:#ffcc00;stroke-width:0.799994;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M 51.351738,102.5571 V 90.135098"
+           id="path2180" />
+        <circle
+           style="fill:#f9f9f9;stroke:#ffcc00;stroke-width:0.8;stroke-miterlimit:4;stroke-dasharray:none"
+           id="circle2182"
+           cx="51.351738"
+           cy="90.624336"
+           r="1.6074982" />
+      </g>
+    </pattern>
+  </defs>
+  <g
+     id="g850"
+     transform="matrix(0.24649109,0,0,0.24649109,-3.0754297,-6.2058667)">
+    <g
+       id="g1010"
+       inkscape:export-filename="/home/kuba/Repositories/lora-to-mqtt-gateway/src/lora2mqtt.png"
+       inkscape:export-xdpi="101.59998"
+       inkscape:export-ydpi="101.59998"
+       transform="matrix(0.80504938,0,0,0.80504938,-58.224028,-31.753815)">
+      <rect
+         style="display:inline;fill:#ffcc00;fill-rule:evenodd;stroke-width:0.264583"
+         id="rect79"
+         width="64"
+         height="64"
+         x="87.821777"
+         y="70.716972"
+         rx="5"
+         ry="5" />
+      <path
+         sodipodi:type="star"
+         style="display:inline;fill:#f2f2f2"
+         id="path331"
+         inkscape:flatsided="true"
+         sodipodi:sides="6"
+         sodipodi:cx="344.95743"
+         sodipodi:cy="320.67529"
+         sodipodi:r1="103.009"
+         sodipodi:r2="89.208412"
+         sodipodi:arg1="1.5707963"
+         sodipodi:arg2="2.0943951"
+         inkscape:rounded="0.14"
+         inkscape:randomized="0"
+         transform="matrix(0.28070625,0,0,0.28108704,22.990071,12.579303)"
+         inkscape:transform-center-y="-1.614643e-05"
+         inkscape:transform-center-x="3.7378929e-06"
+         d="m 344.95743,423.6843 c -14.42126,0 -81.99778,-39.01533 -89.20841,-51.5045 -7.21063,-12.48918 -7.21064,-90.51983 -1e-5,-103.00901 7.21063,-12.48917 74.78715,-51.5045 89.20842,-51.5045 14.42126,0 81.99778,39.01532 89.20841,51.5045 7.21063,12.48918 7.21063,90.51982 0,103.009 -7.21063,12.48918 -74.78715,51.50451 -89.20841,51.50451 z" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.89002px;line-height:1.25;font-family:sans-serif;display:inline;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.234885"
+       x="18.102352"
+       y="61.229332"
+       id="text14507"
+       inkscape:export-filename="/home/kuba/Repositories/lora-to-mqtt-gateway/src/lora2mqtt.png"
+       inkscape:export-xdpi="101.59998"
+       inkscape:export-ydpi="101.59998"><tspan
+         sodipodi:role="line"
+         id="tspan14505"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.89002px;font-family:Prototype;-inkscape-font-specification:'Prototype, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#333333;stroke-width:0.234885"
+         x="18.102352"
+         y="61.229332">LORA2MQTT</tspan></text>
+    <g
+       id="g4862"
+       transform="matrix(0.63279692,0,0,0.63281539,4.7582223,-20.891958)"
+       style="display:inline;fill:#ffcc00;stroke:#333333"
+       inkscape:export-filename="/home/kuba/Repositories/lora-to-mqtt-gateway/src/lora2mqtt.png"
+       inkscape:export-xdpi="101.59998"
+       inkscape:export-ydpi="101.59998"
+       inkscape:label="g4862">
+      <g
+         id="g4748"
+         transform="translate(-11.139219,0.68112187)"
+         style="fill:#ffcc00;stroke:#333333">
+        <g
+           id="g2132"
+           style="fill:#ffcc00;stroke:#333333">
+          <g
+             id="g4078"
+             inkscape:path-effect="#path-effect4080"
+             transform="translate(1.607498,5.6147488)"
+             style="fill:#ffcc00;stroke:#333333">
+            <path
+               style="fill:#ffcc00;stroke:#333333;stroke-width:0.704081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               d="M 64.239082,93.589696 51.351738,92.312187 m 9.623775,1.08433 -7.550027,10.522013 m 5.750945,-7.792269 5.337317,11.799519 m -3.87283,-8.876596 12.887344,1.277506 M 63.904487,99.242363 71.454514,88.72035 m -5.750945,7.792269 -5.337317,-11.799522"
+               id="path1967"
+               inkscape:original-d="M 64.239082,93.589696 51.351738,92.312187"
+               sodipodi:nodetypes="cc" />
+            <circle
+               style="fill:#ffcc00;stroke:#333333;stroke-width:0.8;stroke-miterlimit:4;stroke-dasharray:none"
+               id="path541-8"
+               cx="51.351738"
+               cy="92.312187"
+               r="1.6074982" />
+          </g>
+        </g>
+      </g>
+      <ellipse
+         style="fill:#ffcc00;stroke:#333333;stroke-width:1.95786;stroke-miterlimit:4;stroke-dasharray:none"
+         id="path541"
+         cx="52.908279"
+         cy="102.61531"
+         rx="3.6710627"
+         ry="3.6710641" />
+    </g>
+  </g>
+</svg>

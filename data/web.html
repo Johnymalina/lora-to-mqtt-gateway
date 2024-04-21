@@ -2,6 +2,10 @@
 <html>
 <head>
     <title>ESP32 LoRa2MQTT Gateway</title>
+<<<<<<< HEAD
+=======
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Add FontAwesome CSS -->
+>>>>>>> beta
     <style>
         /* Reset default margin and padding */
         body, h1, h2, ul, li {
@@ -15,6 +19,10 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color 0.3s, color 0.3s;
+<<<<<<< HEAD
+=======
+            position: relative;
+>>>>>>> beta
         }
 
         /* Center the page content */
@@ -25,7 +33,11 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             max-width: 800px;
+<<<<<<< HEAD
             position: relative;
+=======
+            position: relative; /* Add position relative for absolute positioning */
+>>>>>>> beta
         }
 
         /* Style the header */
@@ -83,6 +95,7 @@
             color: #333;
         }
 
+<<<<<<< HEAD
         /* Style the "Update FW" button */
         .update-fw-button {
             position: absolute;
@@ -112,6 +125,48 @@
 
         .new-button-style:hover {
             background-color: #0056b3; /* Darker Blue on hover */
+=======
+        /* Style the buttons */
+        .button-container {
+            display: flex;
+            justify-content: flex-end; /* Align buttons to the right */
+            margin-top: 20px;
+        }
+
+        .update-fw-button,
+        .web-serial-button,
+        .reboot-button {
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin: 0 10px;
+            width: calc(100% / 3 - 20px); /* Calculate width for equal distribution */
+        }
+
+        .update-fw-button {
+            background-color: #007bff; /* Blue for "Update Firmware" button */
+            color: #fff;
+        }
+
+        .web-serial-button {
+            background-color: #007bff; /* Blue for "Web Serial" button */
+            color: #fff;
+        }
+
+        .reboot-button {
+            background-color: #ff0000; /* Red for "Reboot" button */
+            color: #fff;
+        }
+
+        .update-fw-button:hover,
+        .web-serial-button:hover {
+            background-color: #0056b3; /* Darker Blue on hover for "Update Firmware" and "Web Serial" */
+        }
+
+        .reboot-button:hover {
+            background-color: #990000; /* Darker Red on hover for "Reboot" */
+>>>>>>> beta
         }
 
         /* Dark theme */
@@ -119,6 +174,12 @@
             --bg-color: #222; /* Darker background */
             --text-color: #fff;
             --message-bg-color: #444; /* Darker message background */
+<<<<<<< HEAD
+=======
+            --mqtt-color: red; /* Default MQTT status color */
+            --lora-color: red; /* Default LoRa status color */
+            --icon-color: #ccc; /* Default icon color */
+>>>>>>> beta
         }
 
         /* Light theme */
@@ -126,15 +187,27 @@
             --bg-color: #f2f2f2;
             --text-color: #333;
             --message-bg-color: #f9f9f9;
+<<<<<<< HEAD
+=======
+            --icon-color: #333; /* Light icon color */
+>>>>>>> beta
         }
 
         /* Theme switch */
         .theme-switch {
             position: absolute;
+<<<<<<< HEAD
             top: 20px;
             left: 20px;
             display: flex;
             align-items: center;
+=======
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            margin: 20px;
+>>>>>>> beta
         }
 
         .theme-switch input[type="checkbox"] {
@@ -145,12 +218,17 @@
             display: inline-block;
             width: 40px;
             height: 20px;
+<<<<<<< HEAD
             background-color: #ccc;
+=======
+            background-color: #007bff; /* Blue color for the toggle */
+>>>>>>> beta
             border-radius: 20px;
             position: relative;
             cursor: pointer;
         }
 
+<<<<<<< HEAD
         .theme-switch label::after {
             content: '';
             position: absolute;
@@ -169,17 +247,52 @@
 
         .theme-switch input[type="checkbox"]:checked + label::after {
             transform: translateX(20px);
+=======
+        .theme-switch label::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background-color: #fff; /* White color for the toggle button */
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .theme-switch input[type="checkbox"]:checked + label::before {
+            transform: translateX(20px); /* Move the toggle button to the right */
+        }
+
+        /* Icon style */
+        .icon {
+            margin: 0 5px; /* Adjust margin for icons */
+            color: var(--icon-color); /* Set icon color */
+        }
+
+        .wifi-icon {
+            font-size: 24px; /* Make the Wi-Fi/Ethernet icon bigger */
+>>>>>>> beta
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="theme-switch">
+<<<<<<< HEAD
             <input type="checkbox" id="toggle-theme" checked>
             <label for="toggle-theme"></label>
         </div>
         <a href="/update" class="update-fw-button new-button-style">Update FW</a>
         <img src="lora2mqtt.png" alt="LoRa2MQTT Logo" style="max-width: 200px; margin-bottom: 20px;">
+=======
+            <i class="fas fa-sun icon"></i>
+            <input type="checkbox" id="toggle-theme" checked>
+            <label for="toggle-theme"></label>
+            <i class="fas fa-moon icon"></i>
+        </div>
+        <img src="/lora2mqtt.png" alt="LoRa2MQTT Logo" style="max-width: 200px; margin-bottom: 20px;">
+>>>>>>> beta
         <h1>ESP32 LoRa2MQTT Gateway</h1>
         
         <h2>Status Indicators</h2>
@@ -193,6 +306,12 @@
         <!-- Display the current date and time -->
         <p id="current-time" style="font-size: 18px; margin-top: 20px;"></p>
 
+<<<<<<< HEAD
+=======
+        <!-- Add Wi-Fi/Ethernet icon -->
+        <i class="fas fa-wifi icon wifi-icon"></i>
+
+>>>>>>> beta
         <h2>Last Received Messages</h2>
         <ul class="message-list" id="message-list">
             <li class="message-item">
@@ -208,6 +327,16 @@
                 <strong>Content:</strong> Message 3: Sensor Data: 123
             </li>
         </ul>
+<<<<<<< HEAD
+=======
+
+        <!-- Button container -->
+        <div class="button-container">
+            <a href="/update" class="update-fw-button" target="_blank">Update FW</a>
+            <a href="/webserial" class="web-serial-button" target="_blank">Web Serial</a>
+            <a href="/reboot" class="reboot-button">Reboot</a>
+        </div>
+>>>>>>> beta
     </div>
 
     <script>
@@ -215,7 +344,11 @@
         function displayCurrentTime() {
             const currentTimeElement = document.getElementById('current-time');
             const now = new Date();
+<<<<<<< HEAD
             const formattedTime = now.toLocaleString('cs-CS', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+=======
+            const formattedTime = now.toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+>>>>>>> beta
             currentTimeElement.textContent = `Current Time: ${formattedTime}`;
         }
 
@@ -225,10 +358,13 @@
             document.body.classList.toggle('light-theme');
         });
 
+<<<<<<< HEAD
         // Set status colors directly with variables
         document.documentElement.style.setProperty('--mqtt-color', 'green'); // Change to 'red' for "error"
         document.documentElement.style.setProperty('--lora-color', 'green'); // Change to 'green' for "ok"
 
+=======
+>>>>>>> beta
         // Update the current time every second
         setInterval(displayCurrentTime, 1000);
 

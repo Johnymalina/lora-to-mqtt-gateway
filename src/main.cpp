@@ -1,50 +1,27 @@
+<<<<<<< HEAD
 #define DEBUG // INFO Set if the Serial output will be avalaible (1) or not (0)
 #include "config.h"
+=======
+/*
 
-bool msgToSend = 0;
+Name: Lora2Mqtt Gateway
+>>>>>>> beta
 
-#include <LoRa.h>
+Author: Jakub Čihánek
 
-#define SCK 14
-#define MISO 32
-#define MOSI 33
-#define SS 16
-#define RST 4
-#define DIO0 2
+First created: 08.04.2024 14:54
 
-String receivedData;
+Version: 1
 
-void onReceive(int packetSize)
-{
-  if (packetSize == 0)
-    return; // if there's no packet, return
+Last Updated: 08.04.2024
 
-  while (LoRa.available())
-  {
-    receivedData = LoRa.readString();
-  }
-  msgToSend = 1;
-}
+Description: Main station for converting LoRa messages to MQTT for use in HomeAssistant
 
-void loraInitialise()
-{
-  debugln("Connecting LoRa");
-  SPI.begin(SCK, MISO, MOSI, SS);
-  LoRa.setPins(SS, RST, DIO0);
-  if (!LoRa.begin(868E6))
-  {
-    debugln("Starting LoRa failed!");
-    while (1)
-      ;
-  }
-  else
-  {
-    debugln("LoRa Runninng");
-  }
-  LoRa.onReceive(onReceive);
-  LoRa.receive();
-}
+*/
 
+#include <Arduino.h>
+
+<<<<<<< HEAD
 #define ETH_CLK_MODE ETH_CLOCK_GPIO17_OUT
 #define ETH_PHY_POWER -1
 #define ETH_PHY_TYPE ETH_PHY_LAN8720
@@ -63,385 +40,171 @@ void loraInitialise()
 // #define ETH_MDC_PIN 23
 // #define ETH_MDIO_PIN 18
 // #define NRST 5
+=======
+#include <Config.h>
 
-const char *mqtt_broker = "10.10.42.4";
-const char *mqtt_username = "mqtt-user";
-const char *mqtt_password = "HesloMqtt196455";
-const int mqtt_port = 1883;
-WiFiClient espClient;
-PubSubClient client(espClient);
+#include <DebugMonitor.h>
+>>>>>>> beta
 
-static bool eth_connected = false;
+#include <NetworkConnection.h>
 
-void WiFiEvent(WiFiEvent_t event)
-{
-  switch (event)
-  {
-  case SYSTEM_EVENT_ETH_START:
-    Serial.println("ETH Started");
-    // set eth hostname here
-    ETH.setHostname("esp32-ethernet");
-    break;
-  case SYSTEM_EVENT_ETH_CONNECTED:
-    Serial.println("ETH Connected");
-    break;
-  case SYSTEM_EVENT_ETH_GOT_IP:
-    Serial.print("ETH MAC: ");
-    Serial.print(ETH.macAddress());
-    Serial.print(", IPv4: ");
-    Serial.print(ETH.localIP());
-    if (ETH.fullDuplex())
-    {
-      Serial.print(", FULL_DUPLEX");
-    }
-    Serial.print(", ");
-    Serial.print(ETH.linkSpeed());
-    Serial.println("Mbps");
-    eth_connected = true;
-    break;
-  case SYSTEM_EVENT_ETH_DISCONNECTED:
-    Serial.println("ETH Disconnected");
-    eth_connected = false;
-    break;
-  case SYSTEM_EVENT_ETH_STOP:
-    Serial.println("ETH Stopped");
-    eth_connected = false;
-    break;
-  default:
-    break;
-  }
-}
+#include <AsyncTCP.h>
 
-void mqttInitialize()
-{
-  client.setServer(mqtt_broker, mqtt_port);
-  debugln("MQTT Connecting");
-  int counterMqtt = 0;
-  client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
-  while (!client.connected())
-  {
-    debug(".");
-    delay(200);
-    if (++counterMqtt > 100)
-    {
-      debugln("");
-      debugln("Cant connect to MQTT... Restarting");
-      delay(100);
-      ESP.restart();
-    }
-  }
-  debugln("MQTT Connected");
-}
-
-bool mqttPublish(String loraData, const char *topic)
-{
-  bool mqttSent;
-  debugln("MQTT data avalaible to send");
-  int strLenght = loraData.length() + 1;
-  char mqttData[strLenght];
-  loraData.toCharArray(mqttData, strLenght);
-  while (!client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password))
-    ;
-  debugln("MQTT reconnected");
-  if (client.publish(topic, mqttData))
-  {
-    mqttSent = 1;
-  }
-
-  return mqttSent;
-}
-
-#include <WebServer.h>
+#include <ESPAsyncWebServer.h>
 
 #include <ElegantOTA.h>
 
+<<<<<<< HEAD
 WebServer server(80);
+=======
+#include <SPIFFS.h>
 
-unsigned long mqttTimer = 0;
+#include <MqttConnection.h>
 
-bool mqttConnected;
-bool loraConnected;
+#include <LoraConnection.h>
+>>>>>>> beta
 
-void websitePublish()
-{
-  String ptr = "<!DOCTYPE html>\n";
-  ptr += "<html>\n";
-  ptr += "<head>\n";
-  ptr += "    <title>ESP32 LoRa2MQTT Gateway</title>\n";
-  ptr += "    <meta http-equiv=\"refresh\" content=\"30\" />\n";
-  ptr += "    <style>\n";
-  ptr += "        /* Reset default margin and padding */\n";
-  ptr += "        body, h1, h2, ul, li {\n";
-  ptr += "            margin: 0;\n";
-  ptr += "            padding: 0;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Add background color and font styles */\n";
-  ptr += "        body {\n";
-  ptr += "            font-family: 'Arial', sans-serif;\n";
-  ptr += "            background-color: #f2f2f2;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Center the page content */\n";
-  ptr += "        .container {\n";
-  ptr += "            text-align: center;\n";
-  ptr += "            margin: 20px auto;\n";
-  ptr += "            padding: 20px;\n";
-  ptr += "            background-color: #ffffff;\n";
-  ptr += "            border-radius: 10px;\n";
-  ptr += "            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);\n";
-  ptr += "            max-width: 800px;\n";
-  ptr += "            position: relative;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Style the header */\n";
-  ptr += "        h1 {\n";
-  ptr += "            color: #333;\n";
-  ptr += "            margin-bottom: 20px;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Style the status indicators */\n";
-  ptr += "        .status-indicators {\n";
-  ptr += "            display: flex; /* Display indicators horizontally */\n";
-  ptr += "            align-items: center; /* Vertically center indicators */\n";
-  ptr += "            justify-content: center; /* Horizontally center indicators */\n";
-  ptr += "            margin-bottom: 10px; /* Add 10px spacing between indicators */\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        .status-indicator {\n";
-  ptr += "            width: 20px;\n";
-  ptr += "            height: 20px;\n";
-  ptr += "            border-radius: 50%;\n";
-  ptr += "            margin: 0 10px; /* Add 10px spacing between indicators */\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        .mqtt-indicator {\n";
-  ptr += "            background-color: var(--mqtt-color); /* Variable for MQTT status color */\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        .lora-indicator {\n";
-  ptr += "            background-color: var(--lora-color); /* Variable for LoRa status color */\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Style the message list */\n";
-  ptr += "        .message-list {\n";
-  ptr += "            list-style: none;\n";
-  ptr += "            padding: 0;\n";
-  ptr += "            text-align: left;\n";
-  ptr += "            margin-top: 20px;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        .message-item {\n";
-  ptr += "            border: 1px solid #ccc;\n";
-  ptr += "            margin: 10px 0;\n";
-  ptr += "            padding: 10px;\n";
-  ptr += "            background-color: #f9f9f9;\n";
-  ptr += "            border-radius: 5px;\n";
-  ptr += "            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Add spacing between elements */\n";
-  ptr += "        h2 {\n";
-  ptr += "            margin-top: 20px;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Style the status text */\n";
-  ptr += "        #status-text {\n";
-  ptr += "            color: #333;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Style the \"Update FW\" button */\n";
-  ptr += "        .update-fw-button {\n";
-  ptr += "            position: absolute;\n";
-  ptr += "            top: 20px;\n";
-  ptr += "            right: 20px;\n";
-  ptr += "            text-decoration: none;\n";
-  ptr += "            padding: 10px 20px;\n";
-  ptr += "            background-color: #007bff; /* Blue for \"Update Firmware\" button */\n";
-  ptr += "            color: #fff;\n";
-  ptr += "            border-radius: 5px;\n";
-  ptr += "            transition: background-color 0.3s;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        .update-fw-button:hover {\n";
-  ptr += "            background-color: #0056b3; /* Darker Blue on hover */\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        /* Updated button style */\n";
-  ptr += "        .new-button-style {\n";
-  ptr += "            background-color: #007bff; /* Blue */\n";
-  ptr += "            color: #fff;\n";
-  ptr += "            border: none;\n";
-  ptr += "            padding: 10px 20px;\n";
-  ptr += "            border-radius: 5px;\n";
-  ptr += "            transition: background-color 0.3s;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        .new-button-style:hover {\n";
-  ptr += "            background-color: #0056b3; /* Darker Blue on hover */\n";
-  ptr += "        }\n";
-  ptr += "    </style>\n";
-  ptr += "</head>\n";
-  ptr += "<body>\n";
-  ptr += "    <div class=\"container\">\n";
-  ptr += "        <a href=\"/update\" class=\"update-fw-button new-button-style\">Update FW</a>\n";
-  ptr += "        <h1>ESP32 LoRa2MQTT Gateway</h1>\n";
-  ptr += "        \n";
-  ptr += "        <h2>Status Indicators</h2>\n";
-  ptr += "        <div class=\"status-indicators\">\n";
-  ptr += "            <div class=\"status-indicator mqtt-indicator\" id=\"mqtt-indicator\"></div>\n";
-  ptr += "            <span>MQTT Status</span>\n";
-  ptr += "            <div class=\"status-indicator lora-indicator\" id=\"lora-indicator\"></div>\n";
-  ptr += "            <span>LoRa Status</span>\n";
-  ptr += "        </div>\n";
-  ptr += "\n";
-  ptr += "        <!-- Display the current date and time -->\n";
-  ptr += "        <p id=\"current-time\" style=\"font-size: 18px; margin-top: 20px;\"></p>\n";
-  ptr += "\n";
-  ptr += "        <h2>Last Received Messages</h2>\n";
-  ptr += "        <ul class=\"message-list\" id=\"message-list\">\n";
-  ptr += "            <li class=\"message-item\">\n";
-  ptr += "                <strong>Timestamp:</strong> 2023-09-24 10:00:00<br>\n";
-  ptr += "                <strong>Content:</strong> Message 1: Hello, World!\n";
-  ptr += "            </li>\n";
-  ptr += "            <li class=\"message-item\">\n";
-  ptr += "                <strong>Timestamp:</strong> 2023-09-24 10:15:00<br>\n";
-  ptr += "                <strong>Content:</strong> Message 2: Temperature: 25°C\n";
-  ptr += "            </li>\n";
-  ptr += "            <li class=\"message-item\">\n";
-  ptr += "                <strong>Timestamp:</strong> 2023-09-24 10:30:00<br>\n";
-  ptr += "                <strong>Content:</strong> Message 3: Sensor Data: 123\n";
-  ptr += "            </li>\n";
-  ptr += "        </ul>\n";
-  ptr += "    </div>\n";
-  ptr += "\n";
-  ptr += "    <script>\n";
-  ptr += "        // Function to display the current date and time\n";
-  ptr += "        function displayCurrentTime() {\n";
-  ptr += "            const currentTimeElement = document.getElementById('current-time');\n";
-  ptr += "            const now = new Date();\n";
-  ptr += "            const formattedDate = now.toLocaleDateString();\n";
-  ptr += "            const formattedTime = now.toLocaleTimeString();\n";
-  ptr += "            currentTimeElement.textContent = `Current Date and Time: ${formattedDate} ${formattedTime}`;\n";
-  ptr += "        }\n";
-  ptr += "\n";
-  ptr += "        // Set status colors directly with variables\n";
+#include <DebugMonitor.h>
 
-  if (mqttConnected)
-  {
-    ptr += "        document.documentElement.style.setProperty('--mqtt-color', 'green');\n";
-  }
-  else
-  {
-    ptr += "        document.documentElement.style.setProperty('--mqtt-color', 'red');\n";
-  }
-  if (loraConnected)
-  {
-    ptr += "        document.documentElement.style.setProperty('--lora-color', 'green');\n";
-  }
-  else
-  {
-    ptr += "        document.documentElement.style.setProperty('--lora-color', 'red');\n";
-  }
+#include <JsonHandler.h>
 
-  ptr += "\n";
-  ptr += "        // Update the current time every second\n";
-  ptr += "        setInterval(displayCurrentTime, 1000);\n";
-  ptr += "    </script>\n";
-  ptr += "</body>\n";
-  ptr += "</html>\n";
-  server.send(200, "text/html", ptr);
-}
+NetworkConnection network;
 
-#include <ArduinoJson.h>
+MqttConnection mqtt;
 
-StaticJsonDocument<192> doc;
+LoraConnection lora;
 
-String topics[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation"};
+AsyncWebServer server(80);
 
-unsigned long statusPublishTimer = 0;
-#define STATUS_PUBLISH_INTERVAL 60000
+JsonHandler json;
+
+unsigned long gatewayStatusTimer = 0;
 
 void gatewayPublishStatus()
 {
-  StaticJsonDocument<32> doc;
-  String serverStatus;
+  DynamicJsonDocument doc(1024);
+  String gatewayStatus;
+  doc["addr"] = GATEWAY_LORA_ADDRESS;
+  doc["dest"] = GATEWAY_LORA_ADDRESS;
+  doc["lora"] = mqtt.getStatus();
+  doc["mqtt"] = lora.getStatus();
 
-  mqttConnected = client.connect("lora_to_mqtt_gateway", mqtt_username, mqtt_password);
-  loraConnected = LoRa.begin(868E6);
-  LoRa.receive();
+  gatewayStatus.remove(0);
 
-  doc["lora"] = loraConnected;
-  doc["mqtt"] = mqttConnected;
-  serverStatus.remove(0);
-  serializeJson(doc, serverStatus);
-  debug("Server Status Json: ");
-  debugln(serverStatus);
+  serializeJson(doc, gatewayStatus);
 
-  int strLenght = serverStatus.length() + 1;
-  char serverStatusChar[strLenght];
-  serverStatus.toCharArray(serverStatusChar, strLenght);
-  const char *topic = "lora2mqtt/gateway";
-  client.publish(topic, serverStatusChar);
+#ifdef DEBUG
+
+  debug("INFO: ");
+  debug("Gateway Status: ");
+  debugln(gatewayStatus);
+
+  wdebug("INFO: ");
+  wdebug("Gateway Status: ");
+  wdebugln(gatewayStatus);
+
+#endif
+
+  mqtt.publish(json.toChar(gatewayStatus), GATEWAY_LORA_ADDRESS);
 }
 
 void setup()
 {
-  debugBegin(9600);
+  debugBegin(DEBUG_BAUD_RATE);
 
-  loraInitialise();
+  delay(200);
 
+<<<<<<< HEAD
   // wifiConnect();
   WiFi.onEvent(WiFiEvent);
   ETH.begin();
   ETH.config(IPAddress(10, 10, 42, 5), IPAddress(10, 10, 42, 1), IPAddress(255, 255, 255, 0));
   mqttInitialize();
+=======
+#ifdef DEBUG
+  debug("INFO: ");
+  debugln("Debug Monitor Started");
+#endif
+
+  wdebugBegin(&server);
+  wdebugCallback(recvMsg);
+
+  network.setCallback();
+
+  network.begin();
+
+  mqtt.begin();
+
+  lora.begin();
+
+  SPIFFS.begin(true);
+
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/web.html"); });
+
+  server.on("/lora2mqtt.png", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/lora2mqtt.png", "image/png"); });
+
+  server.on("/reboot", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+    request->redirect("/");
+
+    delay(100);
+    
+    ESP.restart(); });
+>>>>>>> beta
 
   ElegantOTA.begin(&server);
 
   server.begin();
-  debugln("HTTP server started");
-  server.on("/", websitePublish);
 }
 
 void loop()
 {
-  if (millis() > statusPublishTimer + STATUS_PUBLISH_INTERVAL)
+
+  if (millis() > gatewayStatusTimer + STATUS_PUBLISH_INTERVAL)
   {
     gatewayPublishStatus();
-    statusPublishTimer = millis();
+    gatewayStatusTimer = millis();
   }
 
   if (msgToSend)
   {
-    debug("LoRa Received data: ");
+
+#ifdef DEBUG
+
+    debug("INFO: ");
+    debugln("LoRa message received");
+    debug("INFO: ");
+    debug("Message: ");
     debugln(receivedData);
-    deserializeJson(doc, receivedData);
-    if (!doc["dest"])
+
+    wdebug("INFO: ");
+    wdebugln("LoRa message received");
+    wdebug("INFO: ");
+    wdebug("Message: ");
+    wdebugln(receivedData);
+
+#endif
+
+    if (json.destinationAddress(receivedData) == GATEWAY_LORA_ADDRESS)
     {
-      int addr = doc["addr"];
-      debugln("Data for Gateway");
-      debug("Source: ");
-      debugln(topics[addr]);
-      String address = topics[addr];
-      const char *topic = address.c_str();
-      if (mqttPublish(receivedData, topic))
-      {
-        debugln("Published to MQTT!");
-      }
-      else
-      {
-        debugln("MQTT Publish Failed!");
-      }
+      mqtt.publish(json.toChar(receivedData), json.sourceAddress(receivedData));
     }
+
     else
     {
-      debugln("Data for diferent device");
+#ifdef DEBUG
+
+      debug("INFO: ");
+      debugln("Message not intended for this device");
+
+      wdebug("INFO: ");
+      wdebugln("Message not intended for this device");
+
+#endif
     }
+
     msgToSend = 0;
-  }
-
-  server.handleClient();
-
-  ElegantOTA.loop();
+    }
 }
