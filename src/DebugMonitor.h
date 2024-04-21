@@ -2,7 +2,11 @@
 #define DEBUG_MONITOR_H
 
 #include <WebSerial.h>
-#include <Config.h>
+
+#define DEBUG_BAUD_RATE 9600
+
+#define DEBUG
+#define DEBUG_LVL 2 // INFO Debug level 1=INFO, 2=ERROR
 
 #ifdef DEBUG
 #define debug(x) Serial.print(x)
