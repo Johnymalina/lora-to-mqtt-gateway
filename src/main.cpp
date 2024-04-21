@@ -15,71 +15,30 @@ Description: Main station for converting LoRa messages to MQTT for use in HomeAs
 */
 
 #include <Arduino.h>
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-#define ETH_CLK_MODE ETH_CLOCK_GPIO17_OUT
-#define ETH_PHY_POWER -1
-#define ETH_PHY_TYPE ETH_PHY_LAN8720
-#define ETH_PHY_ADDR 0
-#define ETH_PHY_MDC 23
-#define ETH_PHY_MDIO 18
-    =======
->>>>>>> 77d4f04 (Merge branch 'beta')
 
 #include <Config.h>
 
-    <<<<<<< HEAD
-// #define ETH_CLK_MODE ETH_CLOCK_GPIO17_OUT
-// #define ETH_POWER_PIN -1
-// #define ETH_TYPE ETH_PHY_LAN8720
-// #define ETH_ADDR 0
-// #define ETH_MDC_PIN 23
-// #define ETH_MDIO_PIN 18
-// #define NRST 5
-=======
-#include <Config.h>
-
-#include <DebugMonitor.h>
-    >>>>>>> beta
-
-#include <NetworkConnection.h>
-
-#include <AsyncTCP.h>
-
-    =======
 #include <DebugMonitor.h>
 
 #include <NetworkConnection.h>
 
 #include <AsyncTCP.h>
 
-    >>>>>>> 77d4f04 (Merge branch 'beta')
 #include <ESPAsyncWebServer.h>
 
 #include <ElegantOTA.h>
 
-    <<<<<<< HEAD
-<<<<<<< HEAD
-    WebServer server(80);
-=======
-=======
->>>>>>> 77d4f04 (Merge branch 'beta')
 #include <SPIFFS.h>
 
 #include <MqttConnection.h>
 
 #include <LoraConnection.h>
-<<<<<<< HEAD
->>>>>>> beta
-=======
->>>>>>> 77d4f04 (Merge branch 'beta')
 
 #include <DebugMonitor.h>
 
 #include <JsonHandler.h>
 
-    NetworkConnection network;
+NetworkConnection network;
 
 MqttConnection mqtt;
 
@@ -90,7 +49,6 @@ AsyncWebServer server(80);
 JsonHandler json;
 
 unsigned long gatewayStatusTimer = 0;
-#define STATUS_PUBLISH_INTERVAL 60000
 
 void gatewayPublishStatus()
 {
@@ -126,16 +84,6 @@ void setup()
 
   delay(200);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-  // wifiConnect();
-  WiFi.onEvent(WiFiEvent);
-  ETH.begin();
-  ETH.config(IPAddress(10, 10, 42, 5), IPAddress(10, 10, 42, 1), IPAddress(255, 255, 255, 0));
-  mqttInitialize();
-=======
-=======
->>>>>>> 77d4f04 (Merge branch 'beta')
 #ifdef DEBUG
   debug("INFO: ");
   debugln("Debug Monitor Started");
@@ -167,10 +115,6 @@ void setup()
     delay(100);
     
     ESP.restart(); });
-<<<<<<< HEAD
->>>>>>> beta
-=======
->>>>>>> 77d4f04 (Merge branch 'beta')
 
   ElegantOTA.begin(&server);
 
@@ -224,5 +168,5 @@ void loop()
     }
 
     msgToSend = 0;
-  }
+    }
 }
