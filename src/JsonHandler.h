@@ -10,7 +10,7 @@ class JsonHandler
 public:
     JsonHandler();
     void serialize();
-    void deserialize();
+    char *toChar(String inputString);
 
 private:
 };
