@@ -16,6 +16,8 @@ Description: Main station for converting LoRa messages to MQTT for use in HomeAs
 
 #include <Arduino.h>
 
+#include <Config.h>
+
 #include <DebugMonitor.h>
 
 #include <NetworkConnection.h>
@@ -51,9 +53,10 @@ unsigned long gatewayStatusTimer = 0;
 
 void gatewayPublishStatus()
 {
-  StaticJsonDocument<32> doc;
+  DynamicJsonDocument doc(1024);
   String gatewayStatus;
-
+  doc["addr"] = GATEWAY_LORA_ADDRESS;
+  doc["dest"] = GATEWAY_LORA_ADDRESS;
   doc["lora"] = mqtt.getStatus();
   doc["mqtt"] = lora.getStatus();
 
