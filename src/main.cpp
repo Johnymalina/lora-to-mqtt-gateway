@@ -44,8 +44,10 @@ LoraConnection lora;
 
 AsyncWebServer server(80);
 
+JsonHandler json;
+
 unsigned long gatewayStatusTimer = 0;
-#define STATUS_PUBLISH_INTERVAL 60000
+#define STATUS_PUBLISH_INTERVAL 10000
 
 void gatewayPublishStatus()
 {
@@ -70,12 +72,9 @@ void gatewayPublishStatus()
   wdebugln(gatewayStatus);
 
 #endif
-
-  int strLenght = gatewayStatus.length() + 1;
-  char gatewayStatusChar[strLenght];
-  gatewayStatus.toCharArray(gatewayStatusChar, strLenght);
   const char *topic = "lora2mqtt/gateway";
-  mqtt.publish(gatewayStatusChar, topic);
+
+  mqtt.publish(json.toChar(gatewayStatus), topic);
 }
 
 void setup()
@@ -148,6 +147,8 @@ void loop()
     wdebugln(receivedData);
 
 #endif
+
+    mqtt.publish(json.toChar(receivedData), "lora2mqtt/meteostation");
 
     msgToSend = 0;
   }
