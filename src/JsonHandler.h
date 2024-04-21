@@ -9,7 +9,8 @@ class JsonHandler
 
 public:
     JsonHandler();
-    void serialize();
+    int sourceAddress(String receivedLoraString);
+    int destinationAddress(String receivedLoraString);
     char *toChar(String inputString);
 
 private:

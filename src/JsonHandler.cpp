@@ -1,11 +1,29 @@
 #include <JsonHandler.h>
 
+DynamicJsonDocument doc(1024);
+
 JsonHandler::JsonHandler()
 {
 }
 
-void JsonHandler::serialize()
+int JsonHandler::sourceAddress(String receivedLoraString)
 {
+    int sourceAddress;
+
+    deserializeJson(doc, receivedLoraString);
+    doc["addr"] = sourceAddress;
+
+    return sourceAddress;
+}
+
+int JsonHandler::destinationAddress(String receivedLoraString)
+{
+    int destinationAddress;
+
+    deserializeJson(doc, receivedLoraString);
+    doc["dest"] = destinationAddress;
+
+    return destinationAddress;
 }
 
 char *JsonHandler::toChar(String inputString)
