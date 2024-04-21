@@ -8,6 +8,7 @@
 #include <WiFiClient.h>
 #include <PubSubClient.h>
 #include <ETH.h>
+#include <Config.h>
 
 class MqttConnection
 {
@@ -22,6 +23,7 @@ private:
     const char *mqtt_username = MQTT_USERNAME;
     const char *mqtt_password = MQTT_PASSWORD;
     const int mqtt_port = 1883;
+    String topicString[];
 };
 
 #endif

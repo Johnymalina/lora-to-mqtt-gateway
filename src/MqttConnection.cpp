@@ -5,6 +5,7 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+String topicStrings[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation"};
 MqttConnection::MqttConnection()
 {
 }
