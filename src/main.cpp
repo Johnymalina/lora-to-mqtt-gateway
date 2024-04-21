@@ -151,7 +151,22 @@ void loop()
 
 #endif
 
-    mqtt.publish(json.toChar(receivedData), "lora2mqtt/meteostation");
+    if (json.destinationAddress(receivedData) == GATEWAY_LORA_ADDRESS)
+    {
+      mqtt.publish(json.toChar(receivedData), "lora2mqtt/meteostation");
+    }
+    else
+    {
+#ifdef DEBUG
+
+      debug("INFO: ");
+      debugln("Message not intended for this device");
+
+      wdebug("INFO: ");
+      wdebugln("Message not intended for this device");
+
+#endif
+    }
 
     msgToSend = 0;
   }
