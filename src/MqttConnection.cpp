@@ -69,7 +69,9 @@ void MqttConnection::begin()
 
 bool MqttConnection::publish(const char *payload, int topic)
 {
+
     bool mqttSent;
+
 #ifdef DEBUG
 
     debug("INFO: ");
@@ -94,6 +96,7 @@ bool MqttConnection::publish(const char *payload, int topic)
 #endif
 
     int counterPublish = 0;
+
     while (!client.publish(LoraAdressString[topic], payload))
     {
         debug(".");
@@ -103,6 +106,7 @@ bool MqttConnection::publish(const char *payload, int topic)
         {
             debugln("");
             wdebugln("");
+
 #ifdef DEBUG
 #if DEBUG_LVL > 1
 
