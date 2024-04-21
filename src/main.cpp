@@ -154,7 +154,7 @@ void loop()
     {
       mqtt.publish(json.toChar(receivedData), json.sourceAddress(receivedData));
     }
-    
+
     else
     {
 #ifdef DEBUG
@@ -169,5 +169,5 @@ void loop()
     }
 
     msgToSend = 0;
-  }
+    }
 }
