@@ -49,7 +49,7 @@ AsyncWebServer server(80);
 JsonHandler json;
 
 unsigned long gatewayStatusTimer = 0;
-#define STATUS_PUBLISH_INTERVAL 10000
+#define STATUS_PUBLISH_INTERVAL 60000
 
 void gatewayPublishStatus()
 {
@@ -154,6 +154,7 @@ void loop()
     {
       mqtt.publish(json.toChar(receivedData), json.sourceAddress(receivedData));
     }
+    
     else
     {
 #ifdef DEBUG

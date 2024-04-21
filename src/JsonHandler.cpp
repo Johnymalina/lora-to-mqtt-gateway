@@ -11,7 +11,7 @@ int JsonHandler::sourceAddress(String receivedLoraString)
     int sourceAddress;
 
     deserializeJson(doc, receivedLoraString);
-    doc["addr"] = sourceAddress;
+    sourceAddress = doc["addr"];
 
     return sourceAddress;
 }
