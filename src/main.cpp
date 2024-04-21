@@ -49,7 +49,6 @@ AsyncWebServer server(80);
 JsonHandler json;
 
 unsigned long gatewayStatusTimer = 0;
-#define STATUS_PUBLISH_INTERVAL 60000
 
 void gatewayPublishStatus()
 {
