@@ -75,9 +75,8 @@ void gatewayPublishStatus()
   wdebugln(gatewayStatus);
 
 #endif
-  const char *topic = "lora2mqtt/gateway";
 
-  mqtt.publish(json.toChar(gatewayStatus), topic);
+  mqtt.publish(json.toChar(gatewayStatus), GATEWAY_LORA_ADDRESS);
 }
 
 void setup()
@@ -153,7 +152,7 @@ void loop()
 
     if (json.destinationAddress(receivedData) == GATEWAY_LORA_ADDRESS)
     {
-      mqtt.publish(json.toChar(receivedData), "lora2mqtt/meteostation");
+      mqtt.publish(json.toChar(receivedData), json.sourceAddress(receivedData));
     }
     else
     {

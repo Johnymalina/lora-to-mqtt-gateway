@@ -15,7 +15,7 @@ class MqttConnection
 public:
     MqttConnection();
     void begin();
-    bool publish(const char *payload, const char *topic);
+    bool publish(const char *payload, int topic);
     bool getStatus();
 
 private:
@@ -23,7 +23,6 @@ private:
     const char *mqtt_username = MQTT_USERNAME;
     const char *mqtt_password = MQTT_PASSWORD;
     const int mqtt_port = 1883;
-    String topicString[];
 };
 
 #endif

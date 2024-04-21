@@ -5,7 +5,10 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-String topicStrings[] = {"lora2mqtt/gateway", "lora2mqtt/meteostation"};
+const char *LoraAdressString[] = {
+    "lora2mqtt/gateway",
+    "lora2mqtt/meteostation"};
+
 MqttConnection::MqttConnection()
 {
 }
@@ -64,7 +67,7 @@ void MqttConnection::begin()
 #endif
 }
 
-bool MqttConnection::publish(const char *payload, const char *topic)
+bool MqttConnection::publish(const char *payload, int topic)
 {
     bool mqttSent;
 #ifdef DEBUG
@@ -91,7 +94,7 @@ bool MqttConnection::publish(const char *payload, const char *topic)
 #endif
 
     int counterPublish = 0;
-    while (!client.publish(topic, payload))
+    while (!client.publish(LoraAdressString[topic], payload))
     {
         debug(".");
         wdebug(".");
