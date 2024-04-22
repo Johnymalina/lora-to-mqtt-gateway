@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>ESP32 LoRa2MQTT Gateway</title>
+    <link rel="icon" href="/favicon.ico"> <!-- Add link to favicon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Add FontAwesome CSS -->
     <style>
         /* Reset default margin and padding */
@@ -192,7 +193,37 @@
         }
 
         .wifi-icon {
-            font-size: 24px; /* Make the Wi-Fi/Ethernet icon bigger */
+            font-size: 36px; /* Make the Wi-Fi/Ethernet icon bigger */
+            margin-top: 10px; /* Add margin top */
+        }
+
+        /* IP address style */
+        .ip-address {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 20px;
+            color: var(--text-color);
+        }
+
+        /* Connection type icon style */
+        .connection-icon {
+            font-size: 36px;
+            color: var(--text-color);
+            margin-top: 10px;
+        }
+
+        /* Container for IP address and connection type */
+        .ip-connection-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-top: 10px;
+        }
+
+        /* Align the icon and IP address horizontally */
+        .ip-connection-container .connection-icon {
+            margin-right: 20px;
         }
     </style>
 </head>
@@ -204,12 +235,13 @@
             <label for="toggle-theme"></label>
             <i class="fas fa-moon icon"></i>
         </div>
+        <div class="ip-connection-container">
+            <div class="ip-address" id="ip-address">IP Address: Loading...</div>
+            <div class="connection-icon" id="connection-icon"></div>
+        </div>
         <img src="/lora2mqtt.png" alt="LoRa2MQTT Logo" style="max-width: 200px; margin-bottom: 20px;">
         <h1>ESP32 LoRa2MQTT Gateway</h1>
         
-        <!-- Add Wi-Fi/Ethernet icon -->
-        <i class="fas fa-wifi icon wifi-icon"></i>
-
         <h2>Status Indicators</h2>
         <div class="status-indicators">
             <div class="status-indicator mqtt-indicator" id="mqtt-indicator"></div>
@@ -250,7 +282,7 @@
         function displayCurrentTime() {
             const currentTimeElement = document.getElementById('current-time');
             const now = new Date();
-            const formattedTime = now.toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const formattedTime = now.toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }); // Changed hour12 to false for 24-hour format
             currentTimeElement.textContent = `Current Time: ${formattedTime}`;
         }
 
@@ -274,6 +306,30 @@
             }
         }
 
+        // Function to fetch and update IP address
+        async function updateIpAddress() {
+            try {
+                const response = await fetch('/ip-address');
+                const data = await response.json();
+                const ipAddressElement = document.getElementById('ip-address');
+                ipAddressElement.textContent = `IP Address: ${data.ipAddress}`;
+            } catch (error) {
+                console.error('Error fetching IP address:', error);
+            }
+        }
+
+        // Function to fetch and update connection type icon
+        async function updateConnectionType() {
+            try {
+                const response = await fetch('/connection-type');
+                const data = await response.json();
+                const connectionIconElement = document.getElementById('connection-icon');
+                connectionIconElement.innerHTML = data.connectionType === 'wifi' ? '<i class="fas fa-wifi wifi-icon"></i>' : '<i class="fas fa-ethernet wifi-icon"></i>';
+            } catch (error) {
+                console.error('Error fetching connection type:', error);
+            }
+        }
+
         // Toggle theme
         const toggleTheme = document.getElementById('toggle-theme');
         toggleTheme.addEventListener('change', function() {
@@ -285,9 +341,13 @@
 
         // Refresh the page every minute
         setInterval(updateStatusColors, 60000); // 60000 milliseconds = 1 minute
+        setInterval(updateIpAddress, 60000); // 60000 milliseconds = 1 minute
+        setInterval(updateConnectionType, 60000); // 60000 milliseconds = 1 minute
 
-        // Initial call to update status colors
+        // Initial calls to update status colors, IP address, and connection type
         updateStatusColors();
+        updateIpAddress();
+        updateConnectionType();
     </script>
 </body>
 </html>
