@@ -106,8 +106,8 @@ void setup()
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/main.html"); });
 
-  server.on("/lora2mqtt.png", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(SPIFFS, "/lora2mqtt.png", "image/png"); });
+  server.on("/logo.png", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/logo.png", "image/png"); });
 
   server.on("/favicon.ico", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/favicon.ico", "image/ico"); });
@@ -129,10 +129,10 @@ void setup()
   server.on("/ip-address", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(200, "application/json", "{\"ipAddress\":\"" + ETH.localIP().toString() + "\"}"); });
 
-    server.on("/connection-type", HTTP_GET, [](AsyncWebServerRequest *request) {
+  server.on("/connection-type", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
         String connectionType = WiFi.getMode() == WIFI_MODE_STA ? "wifi" : "ethernet";
-        request->send(200, "application/json", "{\"connectionType\":\"" + connectionType + "\"}");
-    });
+        request->send(200, "application/json", "{\"connectionType\":\"" + connectionType + "\"}"); });
 
   ElegantOTA.begin(&server);
 
