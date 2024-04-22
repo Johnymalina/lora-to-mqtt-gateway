@@ -59,23 +59,6 @@
             background-color: var(--lora-color); /* Variable for LoRa status color */
         }
 
-        /* Style the message list */
-        .message-list {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .message-item {
-            border: 1px solid #ccc;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: var(--message-bg-color); /* Variable for message background color */
-            border-radius: 5px;
-            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-        }
-
         /* Add spacing between elements */
         h2 {
             margin-top: 20px;
@@ -132,18 +115,14 @@
         :root {
             --bg-color: #222; /* Darker background */
             --text-color: #fff;
-            --message-bg-color: #444; /* Darker message background */
             --mqtt-color: red; /* Default MQTT status color */
             --lora-color: red; /* Default LoRa status color */
-            --icon-color: #ccc; /* Default icon color */
         }
 
         /* Light theme */
         body.light-theme {
             --bg-color: #f2f2f2;
             --text-color: #333;
-            --message-bg-color: #f9f9f9;
-            --icon-color: #333; /* Light icon color */
         }
 
         /* Theme switch */
@@ -253,22 +232,6 @@
         <!-- Display the current date and time -->
         <p id="current-time" style="font-size: 18px; margin-top: 20px;"></p>
 
-        <h2>Last Received Messages</h2>
-        <ul class="message-list" id="message-list">
-            <li class="message-item">
-                <strong>Timestamp:</strong> 2023-09-24 10:00:00<br>
-                <strong>Content:</strong> Message 1: Hello, World!
-            </li>
-            <li class="message-item">
-                <strong>Timestamp:</strong> 2023-09-24 10:15:00<br>
-                <strong>Content:</strong> Message 2: Temperature: 25°C
-            </li>
-            <li class="message-item">
-                <strong>Timestamp:</strong> 2023-09-24 10:30:00<br>
-                <strong>Content:</strong> Message 3: Sensor Data: 123
-            </li>
-        </ul>
-
         <!-- Button container -->
         <div class="button-container">
             <a href="/update" class="update-fw-button" target="_blank">Update FW</a>
@@ -324,7 +287,7 @@
                 const response = await fetch('/connection-type');
                 const data = await response.json();
                 const connectionIconElement = document.getElementById('connection-icon');
-                connectionIconElement.innerHTML = data.connectionType === 'wifi' ? '<i class="fas fa-wifi wifi-icon"></i>' : '<i class="fas fa-ethernet wifi-icon"></i>';
+                connectionIconElement.innerHTML = data.connectionType === 'wifi' ? '<i class="fas fa-wifi icon wifi-icon"></i>' : '<i class="fas fa-ethernet icon wifi-icon"></i>';
             } catch (error) {
                 console.error('Error fetching connection type:', error);
             }
