@@ -50,7 +50,7 @@ AsyncWebServer server(80);
 
 JsonHandler json;
 
-WebHandler web;
+// WebHandler web;
 
 unsigned long gatewayStatusTimer = 0;
 
@@ -62,6 +62,7 @@ void gatewayPublishStatus()
   doc["dest"] = GATEWAY_LORA_ADDRESS;
   doc["lora"] = mqtt.getStatus();
   doc["mqtt"] = lora.getStatus();
+  doc["ip"] = ETH.localIP();
 
   gatewayStatus.remove(0);
 
@@ -106,8 +107,8 @@ void setup()
 
   SPIFFS.begin(true);
 
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(200, "text/html", web.update()); });
+  // server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+  //           { request->send(200, "text/html", web.update()); });
 
   server.on("/lora2mqtt.png", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/lora2mqtt.png", "image/png"); });
