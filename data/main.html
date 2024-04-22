@@ -207,6 +207,9 @@
         <img src="/lora2mqtt.png" alt="LoRa2MQTT Logo" style="max-width: 200px; margin-bottom: 20px;">
         <h1>ESP32 LoRa2MQTT Gateway</h1>
         
+        <!-- Add Wi-Fi/Ethernet icon -->
+        <i class="fas fa-wifi icon wifi-icon"></i>
+
         <h2>Status Indicators</h2>
         <div class="status-indicators">
             <div class="status-indicator mqtt-indicator" id="mqtt-indicator"></div>
@@ -217,9 +220,6 @@
 
         <!-- Display the current date and time -->
         <p id="current-time" style="font-size: 18px; margin-top: 20px;"></p>
-
-        <!-- Add Wi-Fi/Ethernet icon -->
-        <i class="fas fa-wifi icon wifi-icon"></i>
 
         <h2>Last Received Messages</h2>
         <ul class="message-list" id="message-list">
@@ -254,6 +254,26 @@
             currentTimeElement.textContent = `Current Time: ${formattedTime}`;
         }
 
+        // Function to fetch and update LoRa and MQTT status colors
+        async function updateStatusColors() {
+            try {
+                const loraResponse = await fetch('/lora-status');
+                const mqttResponse = await fetch('/mqtt-status');
+                const loraData = await loraResponse.json();
+                const mqttData = await mqttResponse.json();
+
+                // Update LoRa status color
+                const loraIndicator = document.getElementById('lora-indicator');
+                loraIndicator.style.backgroundColor = loraData.status ? 'green' : 'red';
+
+                // Update MQTT status color
+                const mqttIndicator = document.getElementById('mqtt-indicator');
+                mqttIndicator.style.backgroundColor = mqttData.status ? 'green' : 'red';
+            } catch (error) {
+                console.error('Error fetching status:', error);
+            }
+        }
+
         // Toggle theme
         const toggleTheme = document.getElementById('toggle-theme');
         toggleTheme.addEventListener('change', function() {
@@ -264,9 +284,10 @@
         setInterval(displayCurrentTime, 1000);
 
         // Refresh the page every minute
-        setInterval(function() {
-            location.reload();
-        }, 60000); // 60000 milliseconds = 1 minute
+        setInterval(updateStatusColors, 60000); // 60000 milliseconds = 1 minute
+
+        // Initial call to update status colors
+        updateStatusColors();
     </script>
 </body>
 </html>

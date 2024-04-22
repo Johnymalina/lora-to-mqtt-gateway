@@ -38,8 +38,6 @@ Description: Main station for converting LoRa messages to MQTT for use in HomeAs
 
 #include <JsonHandler.h>
 
-#include <WebHandler.h>
-
 NetworkConnection network;
 
 MqttConnection mqtt;
@@ -49,8 +47,6 @@ LoraConnection lora;
 AsyncWebServer server(80);
 
 JsonHandler json;
-
-WebHandler web;
 
 unsigned long gatewayStatusTimer = 0;
 
@@ -108,7 +104,10 @@ void setup()
   SPIFFS.begin(true);
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send(200, "text/html", web.update()); });
+            { request->send(SPIFFS, "/main.html"); });
+
+  server.on("/lora2mqtt.png", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(SPIFFS, "/lora2mqtt.png", "image/png"); });
 
   server.on("/lora2mqtt.png", HTTP_GET, [](AsyncWebServerRequest *request)
             { request->send(SPIFFS, "/lora2mqtt.png", "image/png"); });
@@ -120,6 +119,12 @@ void setup()
     delay(100);
     
     ESP.restart(); });
+
+  server.on("/lora-status", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(200, "application/json", String("{\"status\":") + (lora.getStatus() ? "true" : "false") + "}"); });
+
+  server.on("/mqtt-status", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send(200, "application/json", String("{\"status\":") + (mqtt.getStatus() ? "true" : "false") + "}"); });
 
   ElegantOTA.begin(&server);
 
